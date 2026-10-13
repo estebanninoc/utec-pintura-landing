@@ -31,3 +31,16 @@ Pendiente: precio real (US$XX), links de pago (#PAGO-PENDIENTE), pixel, clips de
   `render.html`, `inter-tight.woff2` y subcarpetas `taller/` y `negro/` con las 7 fotos) para N=71 y N=137, y luego
   `tools/etapas-render/build_set.sh <set> img/pt-frames[-negro]` (clip 1 fps + `tools/frames.sh` despiece / motor-mini).
 - Chips: Latonería, Lijado, Pre-pintura, Pintura, Clear coat, Polish, Resultado final.
+
+## PT7 — orden real del taller (fotos `pt-assets/etapas-v7/`, 2172x724, fondo negro)
+
+- Etapas/chips: Golpes, Latonería, Masilla, Masilla lijada, Primer, Pintura base, Clear coat (FILES/NAMES en render.html).
+- Barrido HORIZONTAL izquierda → derecha (trompa → puerta) en las 6 transiciones, borde suave, SIN neblina. Línea de
+  tiempo y holds sin cambios. Verificado cuadro a cuadro (franja trompa cambia antes que franja puerta, nunca al revés).
+- Encuadre 3:1 sin deformar ni cortar: `render.html?layout=desk` pone el carro a todo el ancho (frames.sh despiece recorta
+  1280x732 al centro, el carro entra completo); `?layout=mob` lo mete en la columna central que sobrevive al recorte vertical
+  de frames.sh motor-mini (x 474..1061 del lienzo 1536x1024). Caja del carro = unión de las 7 fotos (luma>28) + 3%.
+  El reflejo del piso se funde a negro en el 15% inferior de la foto (antes cortaba en seco).
+- Regenerar: `node render.cjs <puerto> 71 /tmp/pt1w/seq-desk negro desk` y `node render.cjs <puerto> 137 /tmp/pt1w/seq-mob negro mob`,
+  luego `tools/etapas-render/build_set.sh negro img/pt-frames-negro`.
+- La variante taller (`img/pt-frames/`) NO se rehízo en PT7 (no hay fotos v7 de taller): sigue con las etapas viejas.

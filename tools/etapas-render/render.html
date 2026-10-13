@@ -1,10 +1,15 @@
 <!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0;background:#000">
 <canvas id="c" width="1536" height="1024"></canvas>
 <script>
-var NAMES=['Latonería','Lijado','Pre-pintura','Pintura','Clear coat','Polish','Resultado final'];
+var NAMES=['Golpes','Latonería','Masilla','Masilla lijada','Primer','Pintura base','Clear coat'];
 /* ?set=taller (fondo taller) | ?set=negro (fondo negro) */
 var SET=new URLSearchParams(location.search).get('set')||'taller';
-var FILES=['1-latoneria','2-lijado','3-prepintura','4-pintura','5-clearcoat','6-polish','7-final'];
+/* PT7: fotos 3:1 (2172x724). ?layout=desk -> carro a lo ancho del lienzo (frames.sh despiece recorta 1280x732 al centro,
+   no lo corta). ?layout=mob -> carro dentro de la columna central que sobrevive al recorte vertical de frames.sh motor-mini
+   (scale-to-cover 1536x1024 -> 1054x703, crop 403 al centro = x 474..1061 del lienzo), así el carro entra ENTERO. */
+var LAYOUT=new URLSearchParams(location.search).get('layout')||'desk';
+var RECT=null, CHIP_Y=118;
+var FILES=['1-golpes','2-latoneria','3-masilla','4-masilla-lijada','5-primer','6-pintura-mate','7-final'];
 var W=1536,H=1024, imgs=[], RED='#C8102E';
 /* linea de tiempo en "unidades": hold inicial largo, 6 transiciones, holds medios, hold final largo */
 var HOLD0=1.4, TR=1.0, HOLD=0.7, HOLDN=1.6, TOTAL=HOLD0+6*TR+5*HOLD+HOLDN;
@@ -21,28 +26,20 @@ function at(u){ /* -> {a: etapa origen, b: etapa destino, t: 0..1} */
 }
 var off=document.createElement('canvas'); off.width=W; off.height=H; var ox=off.getContext('2d');
 function wipe(ctx,A,B,t){
-  ctx.globalAlpha=1; ctx.drawImage(A,0,0,W,H);
-  if(t<=0) return; if(t>=1){ ctx.drawImage(B,0,0,W,H); return; }
-  /* pasada de pistola: barrido de arriba hacia abajo, levemente inclinado, borde suave */
-  var ang=12*Math.PI/180, dx=Math.sin(ang), dy=Math.cos(ang);
-  var L=W*Math.abs(dx)+H*dy, FE=H*0.26, pos=-FE+t*(L+2*FE);
-  var x0=0, y0=0, x1=dx*L, y1=dy*L; if(dx<0){x0=W; x1=W+dx*L;}
-  ox.clearRect(0,0,W,H); ox.globalCompositeOperation='source-over'; ox.drawImage(B,0,0,W,H);
+  /* PT7: barrido HORIZONTAL de izquierda a derecha (trompa -> puerta), borde suave, sin neblina ni efecto de pistola */
+  var R=RECT; ctx.globalAlpha=1; ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
+  ctx.drawImage(A,R.sx,R.sy,R.sw,R.sh,R.x,R.y,R.w,R.h);
+  if(t<=0) return; if(t>=1){ ctx.drawImage(B,R.sx,R.sy,R.sw,R.sh,R.x,R.y,R.w,R.h); return; }
+  var FE=R.w*0.18, pos=R.x-FE/2+t*(R.w+FE);
+  ox.clearRect(0,0,W,H); ox.globalCompositeOperation='source-over'; ox.drawImage(B,R.sx,R.sy,R.sw,R.sh,R.x,R.y,R.w,R.h);
   ox.globalCompositeOperation='destination-in';
-  var g=ox.createLinearGradient(x0,y0,x1,y1);
-  function st(p,a){ p=Math.max(0,Math.min(1,p/L)); g.addColorStop(p,'rgba(0,0,0,'+a+')'); }
-  st(pos-FE/2,1); st(pos+FE/2,0);
+  var g=ox.createLinearGradient(pos-FE/2,0,pos+FE/2,0); g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(1,'rgba(0,0,0,0)');
   ox.fillStyle=g; ox.fillRect(0,0,W,H); ox.globalCompositeOperation='source-over';
   ctx.drawImage(off,0,0);
-  /* neblina de la pasada sobre el borde */
-  var m=ctx.createLinearGradient(x0,y0,x1,y1), a=0.16*Math.sin(Math.PI*t);
-  function ms(p,al){ p=Math.max(0,Math.min(1,p/L)); m.addColorStop(p,'rgba(255,255,255,'+al+')'); }
-  ms(pos-FE*0.55,0); ms(pos,a); ms(pos+FE*0.55,0);
-  ctx.fillStyle=m; ctx.fillRect(0,0,W,H);
 }
 function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 function chip(ctx,s,alpha,dotPos){
-  var cx=W/2, cy=118, fs=40;
+  var cx=W/2, cy=CHIP_Y, fs=40;
   ctx.font='800 '+fs+'px "Inter Tight"';
   var label=NAMES[s], nw=ctx.measureText(label).width;
   var badge=58, padL=14, gap=16, padR=30, w=Math.ceil(padL+badge+gap+nw+padR), h=78;
@@ -73,7 +70,9 @@ function aNegro(ctx){
   for(var i=0;i<d.length;i+=4){ for(var c=0;c<3;c++){ var v=d[i+c]-LO; d[i+c]=v<=0?0:Math.min(255,Math.round(v*k)); } }
   ctx.putImageData(im,0,0);
   function edge(x0,y0,x1,y1){ var g=ctx.createLinearGradient(x0,y0,x1,y1); g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); }
-  edge(0,0,0,H*0.07); edge(0,H,0,H*0.88); edge(0,0,W*0.035,0); edge(W,0,W*0.965,0);
+  edge(0,0,0,H*0.07); edge(0,H,0,H*0.88); /* PT7: sin fundido lateral, el carro 3:1 llega cerca de los bordes */
+  /* PT7: el reflejo del piso termina en el borde inferior de la foto: fundirlo a negro (15% inferior de la foto) */
+  if(RECT){ var yb=RECT.y+RECT.h; edge(0,yb,0,yb-RECT.h*0.15); ctx.fillStyle='#000'; ctx.fillRect(0,yb,W,H-yb); }
 }
 function frame(k,N){
   var ctx=document.getElementById('c').getContext('2d');
@@ -87,6 +86,18 @@ function frame(k,N){
 window.ready=(async function(){
   var f=new FontFace('Inter Tight','url(inter-tight.woff2)',{weight:'100 900'}); await f.load(); document.fonts.add(f);
   imgs=await Promise.all(FILES.map(function(n){return new Promise(function(r){var i=new Image();i.onload=function(){r(i)};i.src=SET+'/'+n+'.png';});}));
+  /* caja del carro (unión de las 7, luma>28) + 3% de margen: recorta solo negro vacío, nunca el carro */
+  var iw=imgs[0].naturalWidth, ih=imgs[0].naturalHeight, c=document.createElement('canvas'); c.width=iw; c.height=ih;
+  var cx2=c.getContext('2d'), x0=iw, y0=ih, x1=0, y1=0;
+  imgs.forEach(function(im){ cx2.drawImage(im,0,0); var d=cx2.getImageData(0,0,iw,ih).data;
+    for(var y=0;y<ih;y+=2) for(var x=0;x<iw;x+=2){ var i=(y*iw+x)*4; if(0.3*d[i]+0.59*d[i+1]+0.11*d[i+2]>28){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; } } });
+  var mx=Math.round((x1-x0)*0.03), my=Math.round((y1-y0)*0.03);
+  x0=Math.max(0,x0-mx); x1=Math.min(iw,x1+mx); y0=Math.max(0,y0-my); y1=Math.min(ih,y1+my);
+  var sw=x1-x0, sh=y1-y0, colX=474, colW=1061-474;
+  var bw = LAYOUT==='mob' ? colW : W, bh=bw*sh/sw, bx = LAYOUT==='mob' ? colX : 0, by=(H-bh)/2 + (LAYOUT==='mob'?40:30);
+  RECT={sx:x0,sy:y0,sw:sw,sh:sh,x:bx,y:by,w:bw,h:bh};
+  CHIP_Y = Math.max(LAYOUT==='mob'?118:120, by-100);
+  window.__rect=RECT;
   return true;
 })();
 </script></body></html>
