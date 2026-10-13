@@ -16,3 +16,18 @@ Cambiado: `config.json`, `template/index.html` (contenido del producto), assets 
 
 Pendiente: precio real (US$XX), links de pago (#PAGO-PENDIENTE), pixel, clips de la grilla
 (`data-src` vacío en cada `<video>` de #temas → `vid/temas/NN-*.mp4`), og:image absoluta al publicar.
+
+## PT2 — scrub rehecho con las fotos APROBADAS (`pt-assets/etapas-v3/` y `etapas-v3-negro/`), 2 variantes
+
+- **A "taller"** → `img/pt-frames/{desk,mob}` (reemplaza los cuadros de las fotos rechazadas).
+- **B "negro"** → `img/pt-frames-negro/{desk,mob}`. Al renderizar se aplastan los negros (≤12 → 0) y se funden los bordes
+  a #000 (las fotos traían fondo ~5,5,5, no negro puro); la sección queda en #000 y el canvas sin esquinas → no hay caja visible.
+- **Cambiar de variante = UNA línea** en `template/index.html` (luego `python3 tools/build.py`), o directo en `index.html`:
+  `<script>var PT_SCRUB='negro';...` → `'taller'`. Por defecto: `'negro'`.
+  `config.json` sigue apuntando a `img/pt-frames/`; con `'negro'` un wrapper en el bootstrap del template cambia SOLO la
+  carpeta de cuadros antes de llamar a `initEscena/initMotor` (engine/scrub.js intacto). La clase `scrub-negro` en `<html>`
+  pone las secciones en #000 y quita el radio del canvas.
+- Regenerar: `tools/etapas-render/render.cjs <puerto> <N> <dir> <taller|negro>` (servido desde una carpeta con
+  `render.html`, `inter-tight.woff2` y subcarpetas `taller/` y `negro/` con las 7 fotos) para N=71 y N=137, y luego
+  `tools/etapas-render/build_set.sh <set> img/pt-frames[-negro]` (clip 1 fps + `tools/frames.sh` despiece / motor-mini).
+- Chips: Latonería, Lijado, Pre-pintura, Pintura, Clear coat, Polish, Resultado final.

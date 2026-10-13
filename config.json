@@ -65,7 +65,7 @@
       "h": 732,
       "dirMob": "img/pt-frames/desk/",
       "dirDesk": "img/pt-frames/desk/",
-      "chips": ["1 · Latonería", "2 · Lijado", "3 · Pre-pintura (primer)", "4 · Pintura (base)", "5 · Clear coat", "6 · Polish", "7 · Resultado final"],
+      "chips": ["1 · Latonería", "2 · Lijado", "3 · Pre-pintura", "4 · Pintura", "5 · Clear coat", "6 · Polish", "7 · Resultado final"],
       "aria_label": "El mismo carro pasando por 7 etapas mientras bajas: latonería, lijado, pre-pintura con primer, pintura base, clear coat, polish y resultado final."
     },
     {
@@ -78,7 +78,7 @@
       "dirMob": "img/pt-frames/mob/",
       "dirDesk": "img/pt-frames/mob/",
       "lutRef": "LUT_PT",
-      "chips": ["1 · Latonería", "2 · Lijado", "3 · Pre-pintura (primer)", "4 · Pintura (base)", "5 · Clear coat", "6 · Polish", "7 · Resultado final"],
+      "chips": ["1 · Latonería", "2 · Lijado", "3 · Pre-pintura", "4 · Pintura", "5 · Clear coat", "6 · Polish", "7 · Resultado final"],
       "aria_label": "El mismo carro pasando por 7 etapas mientras bajas: latonería, lijado, pre-pintura con primer, pintura base, clear coat, polish y resultado final."
     }
   ]

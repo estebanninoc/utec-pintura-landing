@@ -1,7 +1,9 @@
 <!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0;background:#000">
 <canvas id="c" width="1536" height="1024"></canvas>
 <script>
-var NAMES=['Latonería','Lijado','Pre-pintura (primer)','Pintura (base)','Clear coat','Polish','Resultado final'];
+var NAMES=['Latonería','Lijado','Pre-pintura','Pintura','Clear coat','Polish','Resultado final'];
+/* ?set=taller (fondo taller) | ?set=negro (fondo negro) */
+var SET=new URLSearchParams(location.search).get('set')||'taller';
 var FILES=['1-latoneria','2-lijado','3-prepintura','4-pintura','5-clearcoat','6-polish','7-final'];
 var W=1536,H=1024, imgs=[], RED='#C8102E';
 /* linea de tiempo en "unidades": hold inicial largo, 6 transiciones, holds medios, hold final largo */
@@ -63,17 +65,28 @@ function chip(ctx,s,alpha,dotPos){
     if(on>0){ ctx.globalAlpha=on; ctx.beginPath(); ctx.arc(px,dy,9,0,Math.PI*2); ctx.fillStyle=RED; ctx.fill(); ctx.globalAlpha=1; }
   }
 }
+/* variante negro: el fondo de las fotos es casi negro (~5,5,5), no #000. Se aplastan los negros
+   (niveles: todo <=12 -> 0, resto reescalado) y se funden los bordes a negro puro, para que el
+   canvas no deje caja visible sobre el fondo #000 de la página. */
+function aNegro(ctx){
+  var im=ctx.getImageData(0,0,W,H), d=im.data, LO=12, k=255/(255-LO);
+  for(var i=0;i<d.length;i+=4){ for(var c=0;c<3;c++){ var v=d[i+c]-LO; d[i+c]=v<=0?0:Math.min(255,Math.round(v*k)); } }
+  ctx.putImageData(im,0,0);
+  function edge(x0,y0,x1,y1){ var g=ctx.createLinearGradient(x0,y0,x1,y1); g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); }
+  edge(0,0,0,H*0.07); edge(0,H,0,H*0.88); edge(0,0,W*0.035,0); edge(W,0,W*0.965,0);
+}
 function frame(k,N){
   var ctx=document.getElementById('c').getContext('2d');
   var u=(k-1)/(N-1)*TOTAL, s=at(u);
   wipe(ctx,imgs[s.a],imgs[s.b],s.t);
+  if(SET==='negro') aNegro(ctx);
   var shown = s.t<0.5 ? s.a : s.b, alpha = s.a===s.b ? 1 : Math.abs(s.t-0.5)*2;
   chip(ctx,shown,Math.max(0.15,alpha), s.a+1+s.t);
   return document.getElementById('c').toDataURL('image/jpeg',0.95);
 }
 window.ready=(async function(){
   var f=new FontFace('Inter Tight','url(inter-tight.woff2)',{weight:'100 900'}); await f.load(); document.fonts.add(f);
-  imgs=await Promise.all(FILES.map(function(n){return new Promise(function(r){var i=new Image();i.onload=function(){r(i)};i.src=n+'.png';});}));
+  imgs=await Promise.all(FILES.map(function(n){return new Promise(function(r){var i=new Image();i.onload=function(){r(i)};i.src=SET+'/'+n+'.png';});}));
   return true;
 })();
 </script></body></html>

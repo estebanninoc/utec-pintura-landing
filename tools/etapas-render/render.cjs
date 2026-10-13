@@ -1,10 +1,10 @@
 const {chromium}=require('/tmp/pw/node_modules/playwright');
 const fs=require('fs');
-const [,,port,N,outdir]=process.argv;
+const [,,port,N,outdir,set]=process.argv;
 (async()=>{
   const b=await chromium.launch({executablePath:process.env.HOME+'/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome'});
   const p=await b.newPage({viewport:{width:1600,height:1100}});
-  await p.goto('http://127.0.0.1:'+port+'/render.html'); await p.evaluate(()=>window.ready);
+  await p.goto('http://127.0.0.1:'+port+'/render.html?set='+(set||'taller')); await p.evaluate(()=>window.ready);
   fs.mkdirSync(outdir,{recursive:true});
   for(let k=1;k<=+N;k++){
     const d=await p.evaluate(([k,N])=>frame(k,N),[k,+N]);

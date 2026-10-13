@@ -15,6 +15,10 @@
 <link rel="icon" type="image/svg+xml" href="img/logo-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<!-- PT2: variante del scrub "Un carro, 7 etapas". UNA sola línea para cambiar:
+     'negro'  = img/pt-frames-negro/ (fondo negro puro, se funde con la página)  [por defecto]
+     'taller' = img/pt-frames/       (fondo taller, canvas con esquinas redondeadas) -->
+<script>var PT_SCRUB='negro';document.documentElement.classList.add('scrub-'+PT_SCRUB);</script>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-tight.woff2" crossorigin>
 <style>
@@ -383,6 +387,9 @@
   @media(min-width:721px){.only-mob{display:none!important}}
   #scr-pt-stage canvas{height:64vh;max-height:64vh;width:auto;max-width:100%;border-radius:14px}
   .dp-stage canvas{border-radius:14px}
+  /* PT2 variante negro: sin esquinas ni caja; la sección queda en #000 puro como la página */
+  .scrub-negro #despiece,.scrub-negro #escena-pt-mob,.scrub-negro .pack-intro{background:#000}
+  .scrub-negro .dp-stage canvas,.scrub-negro #scr-pt-stage canvas{border-radius:0}
   /* slides del celular con foto (no video) */
   .pv .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
   /* cinta de temas (texto, sin logos) */
@@ -504,7 +511,7 @@
     <canvas id="dp-canvas" width="1280" height="732" role="img" aria-label="El mismo carro pasando por 7 etapas mientras bajas: latonería, lijado, pre-pintura con primer, pintura base, clear coat, polish y resultado final."></canvas>
   </div>
   <div class="dp-bar" id="dp-bar" aria-hidden="true"><i></i></div>
-  <ul class="dp-piezas"><li>1 · Latonería</li><li>2 · Lijado</li><li>3 · Pre-pintura (primer)</li><li>4 · Pintura (base)</li><li>5 · Clear coat</li><li>6 · Polish</li><li>7 · Resultado final</li></ul>
+  <ul class="dp-piezas"><li>1 · Latonería</li><li>2 · Lijado</li><li>3 · Pre-pintura</li><li>4 · Pintura</li><li>5 · Clear coat</li><li>6 · Polish</li><li>7 · Resultado final</li></ul>
 </section>
 
 <!-- QUÉ VAS A APRENDER -->
@@ -520,7 +527,7 @@
   <div class="dp-stage-mini" id="scr-pt-stage">
     <canvas id="scr-pt-canvas" width="403" height="703" role="img" aria-label="El mismo carro pasando por 7 etapas mientras bajas: latonería, lijado, pre-pintura con primer, pintura base, clear coat, polish y resultado final."></canvas>
   </div>
-  <ul class="dp-piezas"><li>1 · Latonería</li><li>2 · Lijado</li><li>3 · Pre-pintura (primer)</li><li>4 · Pintura (base)</li><li>5 · Clear coat</li><li>6 · Polish</li><li>7 · Resultado final</li></ul>
+  <ul class="dp-piezas"><li>1 · Latonería</li><li>2 · Lijado</li><li>3 · Pre-pintura</li><li>4 · Pintura</li><li>5 · Clear coat</li><li>6 · Polish</li><li>7 · Resultado final</li></ul>
 </section>
 
 
@@ -791,6 +798,14 @@
 <script src="engine/scrub.js"></script>
 <script>
 var LUT_PT=[1,137];
+/* PT2: config.json apunta a img/pt-frames/ (taller); con PT_SCRUB='negro' se cambia SOLO la carpeta de
+   cuadros antes de llamar al engine (engine/scrub.js intacto). */
+if(window.PT_SCRUB==='negro'){
+  var _ptDir=function(c){ ['dirMob','dirDesk'].forEach(function(k){ c[k]=c[k].replace('img/pt-frames/','img/pt-frames-negro/'); }); return c; };
+  var _ptE=initEscena, _ptM=initMotor;
+  initEscena=function(c){ return _ptE(_ptDir(c)); };
+  initMotor=function(c){ return _ptM(_ptDir(c)); };
+}
 (function(){
   var mob=window.matchMedia('(max-width:720px)').matches;
   var quitar=document.getElementById(mob?'dp-stage':'scr-pt-stage');
