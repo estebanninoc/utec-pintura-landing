@@ -1,0 +1,85 @@
+{
+  "_comentario": "PT1 (obrero-forge-1): Curso de Pintura Automotriz Profesional + Curso de Polarizado (UTEC). Clonado de landing-kit; solo cambia lo del producto. Fase DISEÑO: precio placeholder US$XX, links #PAGO-PENDIENTE, sin pixel, sin WhatsApp. Paleta: la oscura del kit con acento 'rojo cereza metalizado' (el mismo color del carro terminado en el scrub).",
+  "meta": {
+    "title": "Curso de Pintura Automotriz Profesional + Polarizado · UTEC",
+    "description": "Aprende a pintar carros y motos sin experiencia previa: 12 clases en video HD, de la latonería al acabado espejo. Archivos digitales, acceso de por vida, en celular o PC.",
+    "og_description": "12 clases en video HD + Curso de Polarizado de regalo. Acceso de por vida, celular o PC."
+  },
+  "textos": {
+    "pill": "🎨 UTEC · Pintura Automotriz + Polarizado",
+    "hero_title_html": "Aprende a pintar carros y motos <span class=\"cut\">sin experiencia</span>.",
+    "hero_sub_html": "<b>12 clases en video HD</b> que te llevan de la latonería al <b>acabado espejo</b>: calibración de pistolas, colorimetría, rines y plásticos. Archivos digitales con <b>acceso de por vida</b>, en tu celular o PC.",
+    "cta_hero": "Quiero el curso · US$XX →",
+    "cta_note": "Archivos digitales · Acceso de por vida · Celular o PC",
+    "trust_chips": [
+      "♾️ Acceso de por vida",
+      "📱 Celular o PC",
+      "🛡️ Garantía 7 días"
+    ],
+    "marcas_label": "",
+    "despiece_eyebrow": "Del golpe al brillo",
+    "despiece_title": "Un carro, 7 etapas",
+    "despiece_lead": "Baja y mira el mismo carro pasar por todo el proceso: <b>latonería, lijado, primer, base, clear coat, polish</b> y el resultado final. Es el camino que aprendes paso a paso en el curso.",
+    "pack_intro_eyebrow": "Del golpe al brillo",
+    "pack_intro_title": "Un carro, 7 etapas",
+    "pack_intro_lead": "Baja y mira el mismo carro pasar por todo el proceso: <b>latonería, lijado, primer, base, clear coat, polish</b> y el resultado final."
+  },
+  "precios": {
+    "moneda": "US$",
+    "base": "XX",
+    "a": "XX",
+    "b": "XX",
+    "ab": "XX",
+    "antes_base": ""
+  },
+  "links_pago": {
+    "base": "#PAGO-PENDIENTE",
+    "a": "#PAGO-PENDIENTE",
+    "b": "#PAGO-PENDIENTE",
+    "ab": "#PAGO-PENDIENTE"
+  },
+  "paleta": {
+    "bg": "#000",
+    "panel": "#101012",
+    "panel2": "#17171a",
+    "line": "#28282d",
+    "tx": "#ffffff",
+    "mut": "#9a9aa3",
+    "dim": "#6e6e77",
+    "red": "#B3122E",
+    "red_tx": "#FF5C70",
+    "blue": "#3B72C8"
+  },
+  "marcas": {
+    "row1": [],
+    "row2": []
+  },
+  "animaciones": [
+    {
+      "id": "despiece",
+      "stage": "dp-stage",
+      "canvas": "dp-canvas",
+      "bar": "dp-bar",
+      "n": 71,
+      "w": 1280,
+      "h": 732,
+      "dirMob": "img/pt-frames/desk/",
+      "dirDesk": "img/pt-frames/desk/",
+      "chips": ["1 · Latonería", "2 · Lijado", "3 · Pre-pintura (primer)", "4 · Pintura (base)", "5 · Clear coat", "6 · Polish", "7 · Resultado final"],
+      "aria_label": "El mismo carro pasando por 7 etapas mientras bajas: latonería, lijado, pre-pintura con primer, pintura base, clear coat, polish y resultado final."
+    },
+    {
+      "id": "motor-mini",
+      "stage": "scr-pt-stage",
+      "canvas": "scr-pt-canvas",
+      "n": 137,
+      "w": 403,
+      "h": 703,
+      "dirMob": "img/pt-frames/mob/",
+      "dirDesk": "img/pt-frames/mob/",
+      "lutRef": "LUT_PT",
+      "chips": ["1 · Latonería", "2 · Lijado", "3 · Pre-pintura (primer)", "4 · Pintura (base)", "5 · Clear coat", "6 · Polish", "7 · Resultado final"],
+      "aria_label": "El mismo carro pasando por 7 etapas mientras bajas: latonería, lijado, pre-pintura con primer, pintura base, clear coat, polish y resultado final."
+    }
+  ]
+}

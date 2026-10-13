@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# shim cwebp -> ffmpeg libwebp (no hay cwebp/libwebp-tools en este host). Mapea los MISMOS
+# parametros que usa tools/frames.sh: -q Q -> -quality Q, -m M -> -compression_level M.
+set -e
+Q=75; M=4; IN=""; OUT=""
+while [ $# -gt 0 ]; do case "$1" in -q) Q=$2; shift 2;; -m) M=$2; shift 2;; -o) OUT=$2; shift 2;; *) IN=$1; shift;; esac; done
+exec /opt/dispatch/projects/taller/.work-ffmpeg/ffmpeg-7.0.2-amd64-static/ffmpeg -v error -y -i "$IN" -c:v libwebp -quality "$Q" -compression_level "$M" "$OUT"
