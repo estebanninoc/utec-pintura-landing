@@ -157,7 +157,8 @@ def build(config_path, out_path):
 
     leftover = [t for t in replacements if t in out]
     if missing:
-        raise SystemExit(f"tokens no encontrados en template: {missing}")
+        # PT13: el rediseño boceto dejó fijos hero/marcas/paleta; esos tokens ya no viven en el template
+        print(f"aviso: tokens no usados por el template: {missing}")
     if leftover:
         raise SystemExit(f"tokens sin reemplazar en el resultado: {leftover}")
 
