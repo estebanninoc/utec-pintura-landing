@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # PT9b: escenas chicas "antes -> después mientras bajas" para initDespiece (copiado de motos, n:50).
+# PT10: 36 cuadros, desk reducido al 80% y -q42 (escritorio <= 1,5 MB las dos escenas).
 # Barrido izquierda -> derecha igual al de PT8 (borde difuminado del 65% del ancho, easing smoothstep, sin pausas),
 # bordes de la foto fundidos a negro (la sección es #000), casi-negros a 0. Cuadros f_001..f_050.webp con la MISMA
 # calidad que tools/frames.sh (desk -q55, mob -q40, -m 6; aquí vía el shim cwebp -> ffmpeg libwebp).
@@ -7,7 +8,7 @@
 set -euo pipefail
 FF=/opt/dispatch/projects/taller/.work-ffmpeg/ffmpeg-7.0.2-amd64-static/ffmpeg
 CW="$(dirname "$0")/cwebp"
-A=$1; B=$2; OUT=$3; DW=$4; DH=$5; MW=$6; MH=$7; FADE=${8:-0.12}; N=50
+A=$1; B=$2; OUT=$3; DW=$4; DH=$5; MW=$6; MH=$7; FADE=${8:-0.12}; N=36
 T=$(mktemp -d /dev/shm/pt9mini.XXXX); trap 'rm -rf "$T"' EXIT
 # borde fundido a negro: factor = smoothstep(0,FADE, distancia al borde más cercano en fracción)
 EDGE="st(0,min(min(X/W,1-X/W),min(Y/H,1-Y/H))/$FADE);st(0,clip(ld(0),0,1));st(1,ld(0)*ld(0)*(3-2*ld(0)));st(2,p(X,Y)*ld(1));if(lt(ld(2),6),0,ld(2))"
@@ -21,7 +22,7 @@ mkdir -p "$T/seq" "$OUT/desk" "$OUT/mob"
 $FF -v error -y -loop 1 -i "$T/a.png" -loop 1 -i "$T/b.png" -filter_complex "[0][1]blend=all_expr='$WIPE'" -frames:v $N "$T/seq/f_%03d.png"
 for f in "$T"/seq/f_*.png; do
   b=$(basename "$f" .png)
-  "$CW" -q 55 -m 6 "$f" -o "$OUT/desk/$b.webp"
+  $FF -v error -y -i "$f" -vf "scale=iw*4/5:ih*4/5:flags=lanczos" "$T/d.png"; "$CW" -q 42 -m 6 "$T/d.png" -o "$OUT/desk/$b.webp"
   $FF -v error -y -i "$f" -vf "scale=${MW}:${MH}:flags=lanczos" "$T/m.png"
   "$CW" -q 40 -m 6 "$T/m.png" -o "$OUT/mob/$b.webp"
 done
