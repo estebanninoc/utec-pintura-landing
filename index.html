@@ -12,6 +12,7 @@
 <!-- pt14d-carro-integrado -->
 <!-- pt14e-videos -->
 <!-- pt14f-videos-3x2 -->
+<!-- pt14g-videos-casillas -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -232,14 +233,12 @@
   @media(min-width:821px){.temas{gap:22px;margin:22px auto 0}}
   /* PT14f: el fondo de cabina cubre toda la sección (antes se cortaba a media grilla en desktop) */
   #temas.cab{background-size:100% 100%,cover,auto;background-position:0 0,center,0 0}
-  /* PT14e: integrados como la llanta: sin marco, bordes del video desvanecidos sobre la cabina, 3 tubos LED arriba */
-  .fx{position:relative;aspect-ratio:9/16;padding-top:14px}
-  .fx video{position:absolute;left:0;right:0;top:14px;bottom:0;width:100%;height:calc(100% - 14px);object-fit:cover;background:transparent;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 90%,transparent);-webkit-mask-composite:source-in;
-    mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 90%,transparent);mask-composite:intersect}
-  .fx::before{content:"";position:absolute;top:2px;left:8%;right:8%;height:3px;border-radius:3px;z-index:2;background:var(--tubo);filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px rgba(255,255,255,.6))}
-  .fx::after{content:"";position:absolute;left:0;right:0;top:14px;bottom:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.7) 88%,rgba(0,0,0,0));pointer-events:none}
-  .fx span{position:absolute;left:8px;right:8px;bottom:13%;z-index:2;text-align:center;font-weight:700;font-size:clamp(.82rem,3.4vw,1rem);line-height:1.2;color:#fff;text-shadow:0 1px 6px #000}
+  /* PT14g: cada video en su casilla negra con borde fino y un tubo LED encima (como los .cc, a escala) */
+  .fx{position:relative;aspect-ratio:9/16;background:#000;border:1px solid #1a1a1a;border-radius:8px;overflow:hidden}
+  .fx video{position:absolute;left:0;right:0;bottom:0;top:clamp(12px,2vw,16px);width:100%;height:calc(100% - clamp(12px,2vw,16px));object-fit:cover;background:#000}
+  .fx::before{content:"";position:absolute;top:clamp(4px,.7vw,6px);left:9%;right:9%;height:3px;border-radius:3px;z-index:2;background:var(--tubo);filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 7px rgba(255,255,255,.7))}
+  .fx::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 70% 14% at 50% clamp(12px,2vw,16px),rgba(255,255,255,.22),rgba(255,255,255,0) 100%),linear-gradient(180deg,rgba(0,0,0,0) 62%,rgba(0,0,0,.82))}
+  .fx span{position:absolute;left:4px;right:4px;bottom:9px;z-index:2;text-align:center;white-space:nowrap;font-weight:700;font-size:clamp(.75rem,3.2vw,1rem);letter-spacing:-.01em;line-height:1.2;color:#fff;text-shadow:0 1px 4px #000}
   .fx .tag-bono{position:absolute;left:12px;right:auto;bottom:auto;top:18px;font-family:var(--cond);font-style:italic;font-weight:800;font-size:.9rem;color:#fff;background:rgba(150,6,14,.85);border:1px solid var(--rojo2);border-radius:5px;padding:2px 8px}
 
   /* ===== bonos ===== */
