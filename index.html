@@ -15,6 +15,7 @@
 <!-- pt14g-videos-casillas -->
 <!-- pt14h-videos-edicionpro -->
 <!-- pt14i-videos-negro -->
+<!-- pt14j-videos-luces -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -235,6 +236,10 @@
   @media(max-width:820px){.temas{gap:8px}}
   /* PT14i: sección de videos sobre negro sólido como edicion-pro (sin cabina); las secciones vecinas ya terminan en var(--ink) */
   #temas.cab{background:var(--ink)}
+  /* PT14j: techo de taller: los 3 tubos LED de .cc arriba de la sección + brillo que baja suave sobre el negro */
+  .techo{height:56px;max-width:1040px;margin:-26px auto 6px;background:radial-gradient(ellipse 60% 100% at 50% 0,rgba(255,255,255,.2),rgba(255,255,255,.06) 45%,rgba(255,255,255,0) 75%)}
+  .techo::after{display:none}
+  @media(max-width:820px){#temas{padding-bottom:40px}}
   /* PT14h: tarjetas con el formato de la galería de edicion-pro (3/4, borde fino, brillo arriba-izq, rótulo abajo-izq) */
   .fx{position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;border:1px solid var(--line);display:flex;align-items:flex-end;padding:14px;isolation:isolate;text-align:left;transition:transform .18s ease,border-color .18s}
   .fx video{position:absolute;top:50%;left:50%;width:101%;height:101%;transform:translate(-50%,-50%);object-fit:cover;pointer-events:none;z-index:-1}
@@ -461,6 +466,7 @@
 <!-- TEMAS: grilla lista para <video> (poster = foto; data-src se llena con los clips de Claw) -->
 <section id="temas" class="sec cab">
   <div class="wrap">
+    <div class="cc techo" aria-hidden="true"></div>
     <h2 class="t">Las técnicas que <em>cobran</em> los talleres</h2>
     <p class="lead">Sin experiencia previa: empiezas desde lo básico y llegas a <b>acabados de nivel profesional</b>.</p>
     <div class="stats">
