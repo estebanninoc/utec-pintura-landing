@@ -11,6 +11,7 @@
 <!-- pt14c-antes-despues -->
 <!-- pt14d-carro-integrado -->
 <!-- pt14e-videos -->
+<!-- pt14f-videos-3x2 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -226,8 +227,11 @@
   .stat{text-align:center;padding:12px 4px;border-radius:14px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1)}
   .stat .n{font-family:var(--cond);font-weight:800;font-style:italic;font-size:clamp(1.6rem,7vw,2.4rem);line-height:1;background:var(--plata);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
   .stat .l{margin-top:4px;font-size:clamp(.56rem,2.3vw,.76rem);line-height:1.3;color:var(--mut)}
-  .temas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;max-width:900px;margin:22px auto 0}
-  @media(min-width:821px){.temas{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}}
+  /* PT14f: siempre 3 columnas x 2 filas; en móvil la grilla usa casi todo el ancho (8 px por lado) */
+  .temas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 7px;max-width:900px;margin:22px -12px 0}
+  @media(min-width:821px){.temas{gap:22px;margin:22px auto 0}}
+  /* PT14f: el fondo de cabina cubre toda la sección (antes se cortaba a media grilla en desktop) */
+  #temas.cab{background-size:100% 100%,cover,auto;background-position:0 0,center,0 0}
   /* PT14e: integrados como la llanta: sin marco, bordes del video desvanecidos sobre la cabina, 3 tubos LED arriba */
   .fx{position:relative;aspect-ratio:9/16;padding-top:14px}
   .fx video{position:absolute;left:0;right:0;top:14px;bottom:0;width:100%;height:calc(100% - 14px);object-fit:cover;background:transparent;
