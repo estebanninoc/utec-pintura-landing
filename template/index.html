@@ -1,6 +1,7 @@
 <!doctype html>
 <!-- pt1-v1 -->
 <!-- pt9-custom-shop -->
+<!-- pt9b-custom-shop -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -557,6 +558,64 @@
   .camino p{color:var(--mut)}
   .camino p b{color:#fff}
   .camino-nota{color:var(--mut);margin-top:18px;font-size:15px}
+
+  /* =====================================================================================
+     PT9b (enmienda): reusar lo probado de motos + transiciones de scroll.
+     Solo se animan transform / opacity / clip-path. Todo se apaga con prefers-reduced-motion
+     (las clases .js-* las pone el JS solo si NO hay reduced-motion).
+     ===================================================================================== */
+  /* escenas chicas: CSS de motos /pack-scroll/ tal cual (sin pin). top:auto anula el sticky que traía el kit. */
+  .dp-mini{padding:50px 0 10px}
+  .dp-stage-mini{position:relative;text-align:center;margin:0 auto;top:auto}
+  .dp-stage-mini canvas{display:inline-block;max-width:100%;max-height:78vh;width:auto;height:auto}
+  /* sus cuadros son de fondo negro: misma regla que #despiece */
+  .dp-mini,.mini-intro{background:#000}
+  .mini-intro{padding:60px 0 0;text-align:center}
+  .mini-intro .sec-head{align-items:center}
+  .mini-intro .lead{margin-left:auto;margin-right:auto}
+
+  /* marquesina de colores (mismo .cinta/.cinta-track/@keyframes marq de motos; solo cambia el contenido) */
+  .marq-colores{padding:6px 0 30px}
+  .marq-colores .cinta-it{height:auto}
+  .marq-colores .cinta-track img{height:64px;width:auto;filter:none;opacity:1;border-radius:6px}
+  .marq-colores .cinta-it span{font-family:var(--shop);letter-spacing:.14em;font-size:.85rem;color:var(--chrome);margin-left:10px;text-transform:uppercase}
+  @media(max-width:720px){.marq-colores .cinta-track img{height:48px}}
+
+  /* H1. TÍTULO QUE SE PINTA: contorno cromo; una copia roja encima se destapa de izq. a der. con el scroll */
+  .js-pinta .title.pinta{position:relative;color:transparent;-webkit-text-stroke:1.5px var(--chrome-d)}
+  .js-pinta .title.pinta::after{content:attr(data-t);content:attr(data-t) / "";position:absolute;inset:0;-webkit-text-stroke:0;color:var(--red-tx);
+    background:linear-gradient(90deg,#c3162f,var(--red-tx) 70%,#ffb3bd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    clip-path:inset(-.2em calc(100% - var(--pp,0)*100%) -.2em 0);will-change:clip-path;pointer-events:none}
+
+  /* H2. CINTA QUE SE DESPEGA: tira de cinta de enmascarar tapa el título y se despega al entrar la sección */
+  .peel{position:absolute;inset:-.32em -14px -8px;z-index:3;pointer-events:none;transform-origin:100% 0;clip-path:inset(0 0 0 0);
+    transition:clip-path .75s cubic-bezier(.65,.02,.3,1),transform .85s cubic-bezier(.5,0,.2,1),opacity .25s .6s linear}
+  .peel::before{content:"ENMASCARADO · NO PINTAR";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--shop);font-size:.9rem;letter-spacing:.3em;color:#6d5f3b;
+    background:repeating-linear-gradient(90deg,rgba(0,0,0,.035) 0 2px,transparent 2px 7px),linear-gradient(180deg,#efe4c3,var(--masking) 55%,var(--masking-d));
+    clip-path:polygon(0 4%,1.5% 0,3% 8%,4.5% 1%,6% 6%,7.5% 0,93% 0,94.5% 7%,96% 0,97.5% 6%,100% 2%,100% 96%,98.5% 100%,97% 92%,95.5% 100%,94% 94%,7.5% 100%,6% 93%,4.5% 100%,3% 92%,1.5% 100%,0 95%);
+    box-shadow:0 2px 0 rgba(0,0,0,.25);transform:rotate(-.8deg)}
+  .peeled .peel{clip-path:inset(0 0 0 100%);transform:translate3d(6%,-40%,0) rotate(-5deg);opacity:0}
+  .shop{overflow-x:clip}
+
+  /* H3. GALERÍA HORIZONTAL FIJADA (Tu camino): la sección se fija y los hitos corren en horizontal */
+  .camino-pin{position:relative}
+  #camino.js-hz{padding:0}
+  #camino.js-hz .camino-pin>.wrap{width:100%}
+  #camino.js-hz .camino-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+  #camino.js-hz .camino{display:flex;gap:18px;width:max-content;margin-top:26px;padding-top:6px;will-change:transform}
+  #camino.js-hz .camino::before{left:0;right:0;top:34px;bottom:auto;width:auto;height:4px;background:repeating-linear-gradient(90deg,var(--tape) 0 14px,#16181b 14px 24px)}
+  #camino.js-hz .camino li{flex:0 0 auto;width:min(78vw,400px);padding:78px 20px 22px;min-height:0;background:linear-gradient(180deg,var(--carbon2),#0a0a0b);border:1px solid var(--steel-d);border-radius:12px;box-shadow:0 4px 0 #000}
+  #camino.js-hz .camino .hito{left:18px;top:0}
+  #camino.js-hz .camino-nota{margin-top:20px}
+  .camino-hint{display:none;font-family:var(--shop);letter-spacing:.2em;font-size:.8rem;color:var(--tape);margin-top:6px}
+  #camino.js-hz .camino-hint{display:block}
+
+  @media(prefers-reduced-motion:reduce){
+    .peel{display:none}
+    .js-pinta .title.pinta{color:inherit;-webkit-text-stroke:0}
+    .js-pinta .title.pinta::after{display:none}
+  }
 </style>
 <!-- PT1 fase DISEÑO: sin pixel (lo agrega el Lab al publicar) -->
 </head>
@@ -676,6 +735,29 @@
   </div>
 </section>
 
+<!-- PT9b: escenas chicas scroll-scrub (initDespiece copiado de motos, n:50): restauración de rines y de plásticos -->
+<section class="mini-intro shop">
+  <div class="wrap">
+    <div class="sec-head"><div class="eyebrow">Rines y plásticos</div></div>
+    <h2 class="title">No todo es lámina</h2>
+    <p class="lead">Baja despacio y mira cómo queda un rin rayado y un faro opaco cuando aplicas lo que enseña el curso.</p>
+  </div>
+</section>
+
+<section class="dp dp-mini" id="escena-rin">
+  <div class="dp-stage-mini" id="scr-rin-stage">
+    <canvas id="scr-rin-canvas" width="800" height="800" role="img" aria-label="Rin negro de carro que pasa de rayado y sucio, con raspones en el borde, a restaurado y brillante."></canvas>
+  </div>
+  <ul class="dp-piezas"><li>Restauración de rines</li><li>Raspones del andén</li><li>Pintura negra brillante</li></ul>
+</section>
+
+<section class="dp dp-mini" id="escena-faro">
+  <div class="dp-stage-mini" id="scr-faro-stage">
+    <canvas id="scr-faro-canvas" width="960" height="640" role="img" aria-label="Faro delantero de carro rojo que pasa de opaco y amarillento a transparente y restaurado."></canvas>
+  </div>
+  <ul class="dp-piezas"><li>Restauración de plásticos</li><li>Faro opaco</li><li>Faro transparente</li></ul>
+</section>
+
 <div class="tape-sep alt" aria-hidden="true"><span>UTEC · TALLER DE PINTURA · UTEC · TALLER DE PINTURA</span></div>
 
 <!-- 03 PÍNTALO TÚ (configurador de color) -->
@@ -691,6 +773,11 @@
     <div class="muestras" id="muestras" role="radiogroup" aria-label="Elige el color de la pintura"><button type="button" class="muestra" role="radio" aria-checked="true" data-color="0-rojo" data-nombre="Rojo" style="--c:#b3122e"><i></i><span>Rojo</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="1-negro" data-nombre="Negro" style="--c:#0b0b0c"><i></i><span>Negro</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="2-blanco-perla" data-nombre="Blanco perla" style="--c:linear-gradient(135deg,#ffffff,#ece6f1 60%,#e4eef0)"><i></i><span>Blanco perla</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="3-azul" data-nombre="Azul" style="--c:#1a3fb8"><i></i><span>Azul</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="4-gris-nardo" data-nombre="Gris Nardo" style="--c:#8f9496"><i></i><span>Gris Nardo</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="5-candy-verde" data-nombre="Candy verde" style="--c:#17a33b"><i></i><span>Candy verde</span></button><button type="button" class="muestra mate" role="radio" aria-checked="false" data-color="6-negro-mate" data-nombre="Negro mate" style="--c:#26272a"><i></i><span>Negro mate</span></button></div>
   </div>
 </section>
+
+<!-- PT9b: marquesina con los 7 colores del configurador (mismo .cinta/@keyframes marq de motos) -->
+<div class="marcas marq-colores" aria-label="Los 7 colores del configurador">
+  <div class="cinta"><div class="cinta-track"><span class="cinta-grp"><span class="cinta-it"><img src="img/colores/0-rojo-mob.webp" alt="Carro en rojo" width="192" height="64" loading="lazy" decoding="async"><span>Rojo</span></span><span class="cinta-it"><img src="img/colores/1-negro-mob.webp" alt="Carro en negro" width="192" height="64" loading="lazy" decoding="async"><span>Negro</span></span><span class="cinta-it"><img src="img/colores/2-blanco-perla-mob.webp" alt="Carro en blanco perla" width="192" height="64" loading="lazy" decoding="async"><span>Blanco perla</span></span><span class="cinta-it"><img src="img/colores/3-azul-mob.webp" alt="Carro en azul" width="192" height="64" loading="lazy" decoding="async"><span>Azul</span></span><span class="cinta-it"><img src="img/colores/4-gris-nardo-mob.webp" alt="Carro en gris nardo" width="192" height="64" loading="lazy" decoding="async"><span>Gris Nardo</span></span><span class="cinta-it"><img src="img/colores/5-candy-verde-mob.webp" alt="Carro en candy verde" width="192" height="64" loading="lazy" decoding="async"><span>Candy verde</span></span><span class="cinta-it"><img src="img/colores/6-negro-mate-mob.webp" alt="Carro en negro mate" width="192" height="64" loading="lazy" decoding="async"><span>Negro mate</span></span></span><span class="cinta-grp" aria-hidden="true"><span class="cinta-it"><img src="img/colores/0-rojo-mob.webp" alt="" width="192" height="64" loading="lazy" decoding="async"><span>Rojo</span></span><span class="cinta-it"><img src="img/colores/1-negro-mob.webp" alt="" width="192" height="64" loading="lazy" decoding="async"><span>Negro</span></span><span class="cinta-it"><img src="img/colores/2-blanco-perla-mob.webp" alt="" width="192" height="64" loading="lazy" decoding="async"><span>Blanco perla</span></span><span class="cinta-it"><img src="img/colores/3-azul-mob.webp" alt="" width="192" height="64" loading="lazy" decoding="async"><span>Azul</span></span><span class="cinta-it"><img src="img/colores/4-gris-nardo-mob.webp" alt="" width="192" height="64" loading="lazy" decoding="async"><span>Gris Nardo</span></span><span class="cinta-it"><img src="img/colores/5-candy-verde-mob.webp" alt="" width="192" height="64" loading="lazy" decoding="async"><span>Candy verde</span></span><span class="cinta-it"><img src="img/colores/6-negro-mate-mob.webp" alt="" width="192" height="64" loading="lazy" decoding="async"><span>Negro mate</span></span></span></div></div>
+</div>
 
 <div class="tape-sep" aria-hidden="true"><span>PINTURA FRESCA · NO TOCAR · PINTURA FRESCA · NO TOCAR</span></div>
 
@@ -737,10 +824,11 @@
 
 <!-- 06 TU CAMINO (ritmo sugerido, con el contenido real del curso) -->
 <section id="camino" class="shop">
-  <div class="wrap">
+  <div class="camino-pin"><div class="wrap">
     <div class="sec-head"><span class="placa">06</span><div class="eyebrow">Tu camino</div></div>
     <h2 class="title">De cero a tu primer carro cobrado</h2>
     <p class="lead">Un ritmo sugerido con lo que trae el curso. Tú pones la velocidad.</p>
+    <p class="camino-hint" aria-hidden="true">Sigue bajando →</p>
     <ol class="camino">
       <li><span class="hito"><small>SEM</small><b>1</b></span><h3>Lijas y masilla</h3><p>Con <b>Tipos de lijas</b> y <b>Aplicación de masilla</b> practicas en una pieza vieja hasta dejarla pareja.</p></li>
       <li><span class="hito"><small>SEM</small><b>2</b></span><h3>Golpes fuera</h3><p>Con la <b>Clase Latonería PRO</b> (bono) sacas golpes y dejas la lámina lista para el primer.</p></li>
@@ -749,7 +837,7 @@
       <li class="meta"><span class="hito"><small>META</small><b>✓</b></span><h3>Tu primer trabajo cobrado</h3><p>Con el PDF <b>Plantilla de costos</b> armas tu cotización y cobras tu primer retoque. Y si quieres sumar otro servicio, tienes el <b>Curso de Polarizado</b> de bono.</p></li>
     </ol>
     <p class="camino-nota">Ritmo sugerido, no obligatorio: tienes acceso de por vida para avanzar a tu velocidad.</p>
-  </div>
+  </div></div>
 </section>
 
 <div class="tape-sep alt" aria-hidden="true"><span>UTEC · TALLER DE PINTURA · UTEC · TALLER DE PINTURA</span></div>
@@ -1091,6 +1179,124 @@
   box.addEventListener('keydown',function(e){ var bs=[].slice.call(box.querySelectorAll('.muestra')), i=bs.indexOf(document.activeElement); if(i<0) return;
     var j = e.key==='ArrowRight'||e.key==='ArrowDown' ? (i+1)%bs.length : e.key==='ArrowLeft'||e.key==='ArrowUp' ? (i-1+bs.length)%bs.length : -1;
     if(j>=0){ e.preventDefault(); bs[j].focus(); elegir(bs[j]); } });
+})();
+</script>
+<script>
+/* PT9b: initDespiece COPIADO IDÉNTICO de motos /pack-scroll/ (no editar: si cambia, se vuelve a copiar) */
+/* escenas chicas (motor/carburador/freno): misma mecánica que arriba, generalizada para N escenarios,
+   con precarga perezosa (solo arranca cuando el escenario se acerca al viewport) */
+function initDespiece(cfg){
+  var stage=document.getElementById(cfg.stage), canvas=document.getElementById(cfg.canvas);
+  if(!stage||!canvas) return;
+  var ctx=canvas.getContext('2d'), N=cfg.n, W=cfg.w, H=cfg.h;
+  var dir = window.matchMedia('(max-width:720px)').matches ? cfg.dirMob : cfg.dirDesk;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tag = cfg.tag ? document.getElementById(cfg.tag) : null;
+  var imgs=[], ok=[], want=1, started=false, busy=false;
+  function src(i){ return dir+'f_'+String(i).padStart(3,'0')+'.webp'; }
+  function draw(i){ if(ok[i]){ ctx.clearRect(0,0,W,H); ctx.drawImage(imgs[i],0,0,W,H); } }
+  function show(i){
+    want=i; if(ok[i]) return draw(i);
+    for(var d=1;d<N;d++){ if(ok[i-d]) return draw(i-d); if(ok[i+d]) return draw(i+d); }
+  }
+  function load(i){ if(imgs[i]) return; var im=new Image(); im.decoding='async'; im.onload=function(){ ok[i]=true; if(i===want) draw(i); }; im.src=src(i); imgs[i]=im; }
+  function startLoad(){
+    if(started) return; started=true;
+    if(reduced){ load(N); want=N; return; }
+    load(1); load(N);
+    var rest=[]; for(var q=2;q<N;q++) rest.push(q);
+    (function more(){ rest.splice(0,6).forEach(load); if(rest.length) setTimeout(more,90); })();
+  }
+  function tick(){
+    busy=false;
+    var r=stage.getBoundingClientRect(), vh=window.innerHeight;
+    var start=vh, end=vh*0.45 - r.height/2;
+    var p=(start - r.top)/(start - end); p=Math.max(0,Math.min(1,p));
+    show(1+Math.round(p*(N-1)));
+    if(tag) tag.classList.toggle('show', p>.92);
+  }
+  function req(){ if(!busy){ busy=true; requestAnimationFrame(tick); } }
+  function activar(){
+    startLoad();
+    window.addEventListener('scroll',req,{passive:true});
+    window.addEventListener('resize',req);
+    tick();
+  }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ activar(); io.disconnect(); } });
+    },{rootMargin:'600px 0px 600px 0px'});
+    io.observe(stage);
+  } else { activar(); }
+}
+initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:50,w:800,h:800,
+  dirMob:'img/mini-frames/rin/mob/',dirDesk:'img/mini-frames/rin/desk/'});
+initDespiece({stage:'scr-faro-stage',canvas:'scr-faro-canvas',n:50,w:960,h:640,
+  dirMob:'img/mini-frames/faro/mob/',dirDesk:'img/mini-frames/faro/desk/'});
+</script>
+<script>
+/* PT9b: transiciones de scroll (vanilla, rAF + IntersectionObserver). Solo transform/opacity/clip-path.
+   Con prefers-reduced-motion no se activa nada: títulos rellenos, sin cinta, "Tu camino" como lista, cifras finales. */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var root=document.documentElement, vis=new Set(), busy=false;
+  root.classList.add('js-pinta');
+
+  /* H1 título que se pinta + H2 cinta que se despega */
+  var titulos=[].slice.call(document.querySelectorAll('.shop h2.title'));
+  var ioT=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) vis.add(e.target); else vis.delete(e.target); }); req(); });
+  var ioP=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('peeled'); ioP.unobserve(e.target); } }); },{rootMargin:'0px 0px -22% 0px'});
+  titulos.forEach(function(h){
+    h.classList.add('pinta'); h.setAttribute('data-t',h.textContent);
+    var t=document.createElement('span'); t.className='peel'; t.setAttribute('aria-hidden','true'); h.appendChild(t);
+    t.addEventListener('transitionend',function(e){ if(e.propertyName==='opacity' && t.parentNode) t.parentNode.removeChild(t); });
+    ioT.observe(h); ioP.observe(h);
+  });
+
+  /* H3 galería horizontal fijada (Tu camino) */
+  var cam=document.getElementById('camino'), ol=cam&&cam.querySelector('ol.camino'), dist=0, camOn=false;
+  function medirCamino(){
+    if(!ol) return;
+    ol.style.transform='none';
+    var x0=ol.getBoundingClientRect().left;
+    dist=Math.max(0, Math.ceil(x0+ol.scrollWidth+20-root.clientWidth));
+    cam.style.height=(cam.querySelector('.camino-pin').offsetHeight+dist)+'px';
+  }
+  if(cam&&ol){
+    cam.classList.add('js-hz'); medirCamino();
+    new IntersectionObserver(function(es){ camOn=es[0].isIntersecting; req(); }).observe(cam);
+    window.addEventListener('resize',function(){ medirCamino(); req(); });
+  }
+
+  /* H4 contadores que suben (órdenes de trabajo) */
+  function fmt(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+  var ioN=new IntersectionObserver(function(es){ es.forEach(function(e){
+    if(!e.isIntersecting) return; ioN.unobserve(e.target);
+    [].forEach.call(e.target.querySelectorAll('dd'),function(dd){
+      var m=dd.textContent.match(/^(\D*)([\d.]+)(.*)$/); if(!m) return;
+      var fin=parseInt(m[2].replace(/\./g,''),10), t0=performance.now(), D=1300;
+      /* ancho fijo = el de la cifra final, para que nada se mueva mientras sube */
+      dd.style.width=dd.getBoundingClientRect().width+'px'; dd.style.whiteSpace='nowrap'; dd.textContent=m[1]+'0'+m[3];
+      requestAnimationFrame(function paso(t){ var k=Math.max(0,Math.min(1,(t-t0)/D)), ez=1-Math.pow(1-k,3);
+        if(k<1){ dd.textContent=m[1]+fmt(fin*ez)+m[3]; requestAnimationFrame(paso); }
+        else { dd.textContent=m[0]; dd.style.width=''; dd.style.whiteSpace=''; } });
+    });
+  }); },{threshold:.35});
+  [].forEach.call(document.querySelectorAll('.orden dl'),function(dl){ ioN.observe(dl); });
+
+  function tick(){
+    busy=false; var vh=window.innerHeight;
+    vis.forEach(function(h){
+      var r=h.getBoundingClientRect(), p=(vh*0.9 - r.top)/(vh*0.55); p=Math.max(0,Math.min(1,p));
+      h.style.setProperty('--pp',p.toFixed(3));
+    });
+    if(camOn&&dist>0){
+      var p=-cam.getBoundingClientRect().top/dist; p=Math.max(0,Math.min(1,p));
+      ol.style.transform='translate3d('+(-p*dist).toFixed(1)+'px,0,0)';
+    }
+  }
+  function req(){ if(!busy){ busy=true; requestAnimationFrame(tick); } }
+  window.addEventListener('scroll',req,{passive:true}); window.addEventListener('resize',req); req();
 })();
 </script>
 <!-- kit landing-kit: tokens sin uso desde PT8 (escena móvil vertical + engine/scrub.js reemplazados por el IIFE de motos).
