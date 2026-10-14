@@ -6,6 +6,7 @@
 <!-- pt11-cabina-led -->
 <!-- pt12-giro -->
 <!-- pt13-boceto-total -->
+<!-- pt14a-correcciones -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -69,9 +70,8 @@
   .cta{text-align:center;margin-top:34px}
 
   /* ===== tarjeta carbono: tubo LED arriba, glow rojo abajo ===== */
-  .cc{position:relative;border-radius:18px;border:1px solid rgba(255,255,255,.13);
-    background:linear-gradient(180deg,rgba(26,26,30,.55),rgba(4,4,6,.82)),url(img/cabina/carbono.webp) 0 0/120px auto,#0a0a0c;
-    box-shadow:0 22px 44px -20px #000,0 12px 28px -14px rgba(255,25,35,.55),inset 0 1px 0 rgba(255,255,255,.07),inset 0 -1px 0 rgba(255,45,55,.7)}
+  /* PT14a: sin caja (transparente sobre la cabina); se conservan los 3 tubos LED de arriba y el glow rojo de abajo */
+  .cc{position:relative;border-radius:18px;background:none;border:0;box-shadow:none}
   .cc::before{content:"";position:absolute;top:9px;left:7%;right:7%;height:3px;border-radius:3px;background:var(--tubo);
     filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 9px rgba(255,255,255,.65));pointer-events:none}
   .cc::after{content:"";position:absolute;left:10%;right:10%;bottom:-1px;height:2px;border-radius:2px;pointer-events:none;
@@ -107,50 +107,23 @@
   /* tornamesa (PT12) mudado aquí, borde a borde */
   .vit-cab{position:relative;margin:6px calc(50% - 50vw) 0;overflow:hidden}
   .vit-cab::before{content:"";position:absolute;inset:4% 0 0;pointer-events:none;background:radial-gradient(ellipse 58% 44% at 50% 52%,rgba(0,0,0,.9) 40%,rgba(0,0,0,.4) 72%,rgba(0,0,0,0) 90%)}
-  .giro{position:relative;margin:0;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
-  .giro.agarrado{cursor:grabbing}
+  .giro{position:relative;margin:0;pointer-events:none}
   .giro canvas{display:block;width:100%;height:auto;aspect-ratio:422/264;transition:opacity .3s ease;
     background:url(assets/giro/m/g001.webp) center/128% auto no-repeat;
     -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent),linear-gradient(180deg,transparent,#000 16%,#000 82%,transparent);-webkit-mask-composite:source-in;
     mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent),linear-gradient(180deg,transparent,#000 16%,#000 82%,transparent);mask-composite:intersect}
-  .giro-hint{position:absolute;left:50%;bottom:10%;transform:translateX(-50%);white-space:nowrap;pointer-events:none;transition:opacity .4s;
-    font-weight:500;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.8);
-    background:rgba(0,0,0,.42);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 13px}
-  .giro.usado .giro-hint{opacity:0}
-  .vitrina{position:absolute;left:3%;right:3%;top:52%;transform:translateY(-50%);aspect-ratio:1600/534;overflow:hidden;mix-blend-mode:lighten;transition:opacity .3s ease;
     -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent),linear-gradient(180deg,transparent,#000 14%);-webkit-mask-composite:source-in;
     mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent),linear-gradient(180deg,transparent,#000 14%);mask-composite:intersect}
-  .vitrina img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s ease}
-  .vitrina img.on{opacity:1}
-  .vit-cab.giro-on .vitrina{opacity:0;pointer-events:none}
-  .vit-cab:not(.giro-on) .giro canvas{opacity:0}
-  .vit-cab:not(.giro-on) .giro{pointer-events:none}
-  .vit-cab:not(.giro-on) .giro-hint{opacity:0}
   @media(min-width:900px){
     .vit-cab{margin:10px auto 0;max-width:1240px;overflow:visible}
     .giro{margin:0}
     .giro canvas{aspect-ratio:604/352;background-size:119.2% auto;background-image:url(assets/giro/d/g001.webp)}
-    .vitrina{left:9%;right:9%}
   }
-  /* fila de 7 esferas 3D */
-  .muestras{position:relative;z-index:2;display:flex;flex-wrap:nowrap;justify-content:center;gap:clamp(3px,1.5vw,26px);margin:4px auto 0;padding:0 8px;max-width:980px}
-  .muestra{flex:0 1 84px;min-width:0;background:none;border:0;color:var(--tx);cursor:pointer;display:flex;flex-direction:column;align-items:center;font:inherit;padding:0;-webkit-tap-highlight-color:transparent}
-  .muestra i{display:block;width:clamp(42px,12vw,92px);height:clamp(42px,12vw,92px);border-radius:50%;background:none center/contain no-repeat;transition:box-shadow .25s,transform .25s;
     -webkit-box-reflect:below 3px linear-gradient(transparent 55%,rgba(255,255,255,.22))}
-  .muestra[data-color="0-rojo"] i{background-image:url(img/esferas/0-rojo.webp)}
-  .muestra[data-color="1-negro"] i{background-image:url(img/esferas/1-negro.webp)}
-  .muestra[data-color="2-blanco-perla"] i{background-image:url(img/esferas/2-blanco-perla.webp)}
-  .muestra[data-color="3-azul"] i{background-image:url(img/esferas/3-azul.webp)}
-  .muestra[data-color="4-gris-nardo"] i{background-image:url(img/esferas/4-gris-nardo.webp)}
-  .muestra[data-color="5-candy-verde"] i{background-image:url(img/esferas/5-candy-verde.webp)}
-  .muestra[data-color="6-negro-mate"] i{background-image:url(img/esferas/6-negro-mate.webp)}
-  .muestra span{margin-top:clamp(14px,3.4vw,26px);text-transform:lowercase;font-size:clamp(.56rem,2.4vw,.95rem);line-height:1.15;text-align:center;color:#d3d5da;white-space:normal}
-  @media(min-width:821px){.muestra span{white-space:nowrap}}
-  .muestra[aria-checked="true"] i,.muestra:focus-visible i{box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 0 18px 4px rgba(255,255,255,.3);transform:translateY(-2px)}
-  .muestra[aria-checked="true"] span{color:#fff;font-weight:600}
-  .muestra:focus-visible{outline:none}
   /* tarjeta "Cuánto te deja un trabajo" */
   .cuanto{max-width:860px;margin:44px auto 0;padding:46px 16px 22px}
+  .cu-pais{margin-top:12px;text-align:center;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .cu-pais select{margin-left:6px;font:inherit;letter-spacing:0;text-transform:none;font-size:.8rem;color:#e7e8eb;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 10px}
   .cuanto .t{font-size:clamp(1.9rem,8.6vw,3.3rem)}
   .cu-cap{text-align:center;margin-top:12px;color:var(--mut);font-size:.82rem}
   .filas{display:grid;gap:9px;margin-top:18px}
@@ -171,22 +144,21 @@
 
   /* ===== Un carro, 7 etapas (scrub intacto) ===== */
   .dp{text-align:center}
-  .etapas{list-style:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(3px,1vw,12px);max-width:1080px;margin:30px auto 0;padding:0 8px}
-  .etapas li{position:relative;display:flex;flex-direction:column;align-items:center;padding:clamp(14px,2.6vw,22px) 0 clamp(6px,1.4vw,12px);border-radius:clamp(7px,1.6vw,14px);overflow:hidden;
+  .etapas{list-style:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(3px,.8vw,8px);max-width:760px;margin:16px auto 0;padding:0 6px}
+  .etapas li{position:relative;display:flex;flex-direction:column;align-items:center;padding:clamp(7px,1.4vw,10px) 0 clamp(4px,.8vw,6px);border-radius:clamp(6px,1.2vw,10px);overflow:hidden;
     background:linear-gradient(180deg,rgba(24,24,28,.8),rgba(4,4,6,.95));border:1px solid rgba(255,255,255,.12);opacity:.5;transition:opacity .3s,box-shadow .3s,border-color .3s}
-  .etapas li::before{content:"";position:absolute;top:4px;left:12%;right:12%;height:2px;border-radius:2px;background:#fff;opacity:.25;transition:opacity .3s,box-shadow .3s}
-  .etapas b{position:relative;z-index:1;font-family:var(--cond);font-weight:800;font-style:italic;font-size:clamp(.66rem,2.8vw,1.15rem);line-height:1;color:#fff;
-    padding:3px clamp(3px,1vw,8px);border:1px solid var(--rojo2);border-radius:4px;background:rgba(120,5,12,.6)}
-  .etapas img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:40% 62%;margin:clamp(5px,1.2vw,10px) 0 clamp(4px,1vw,8px)}
-  .etapas span{font-size:clamp(.5rem,2.15vw,.86rem);line-height:1.15;color:#e3e4e7;padding:0 2px;min-height:2.3em;display:flex;align-items:center}
+  .etapas li::before{content:"";position:absolute;top:2px;left:14%;right:14%;height:1.5px;border-radius:2px;background:#fff;opacity:.25;transition:opacity .3s,box-shadow .3s}
+  .etapas b{position:relative;z-index:1;font-family:var(--cond);font-weight:800;font-style:italic;font-size:clamp(.6rem,2.3vw,.92rem);line-height:1;color:#fff;
+    padding:2px clamp(3px,.8vw,6px);border:1px solid var(--rojo2);border-radius:4px;background:rgba(120,5,12,.6)}
+  .etapas span{margin-top:4px;font-size:clamp(.46rem,1.9vw,.74rem);line-height:1.1;color:#e3e4e7;padding:0 2px;min-height:2.2em;display:flex;align-items:center}
   .etapas li.on{opacity:1;border-color:var(--rojo2);box-shadow:0 0 14px rgba(255,30,40,.55),inset 0 -1px 0 var(--rojo2)}
   .etapas li.on::before{opacity:1;box-shadow:0 0 6px #fff,0 0 12px rgba(255,255,255,.7)}
-  .dp-stage{position:relative;max-width:1080px;margin:22px auto 0}
+  .dp-stage{position:relative;max-width:820px;margin:12px auto 0}
   .dp-stage canvas{display:block;width:100%;height:auto;aspect-ratio:1280/732}
-  .dp-bar{max-width:300px;height:3px;border-radius:99px;background:#1c1c21;margin:16px auto 0;overflow:hidden}
+  .dp-bar{max-width:300px;height:3px;border-radius:99px;background:#1c1c21;margin:10px auto 0;overflow:hidden}
   .dp-bar i{display:block;height:100%;width:calc(var(--t,0)*100%);background:var(--rojo2);box-shadow:0 0 8px var(--rojo2)}
-  .fx-note{margin-top:16px;color:var(--mut);font-size:.9rem;padding:0 20px}
-  #despiece{padding-top:70px}
+  .fx-note{margin-top:10px;color:var(--mut);font-size:.9rem;padding:0 20px}
+  #despiece{padding-top:44px;padding-bottom:36px}
 
   /* ===== antes / después ===== */
   .ad-card{padding:44px 14px 18px;max-width:1000px;margin:0 auto}
@@ -201,6 +173,9 @@
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:2px solid #fff;box-shadow:0 0 14px rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;cursor:ew-resize}
   .ad-handle::before{content:"‹ ›";font-size:1.05rem;font-weight:700;line-height:1;color:#fff;letter-spacing:.2em;margin-left:.2em}
   .ad-handle:focus-visible{outline:2px solid var(--rojo2);outline-offset:4px}
+  .ad-mini{max-width:760px;margin:0 auto}
+  .ad.ad-faro{aspect-ratio:3/2}
+  #plasticos{padding-top:10px;padding-bottom:24px}
   .ad-lb{margin-top:14px}
   .ad-nota{margin-top:10px;text-align:center;color:var(--faint);font-size:.8rem}
 
@@ -241,15 +216,13 @@
   .stat{text-align:center;padding:12px 4px;border-radius:14px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1)}
   .stat .n{font-family:var(--cond);font-weight:800;font-style:italic;font-size:clamp(1.6rem,7vw,2.4rem);line-height:1;background:var(--plata);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
   .stat .l{margin-top:4px;font-size:clamp(.56rem,2.3vw,.76rem);line-height:1.3;color:var(--mut)}
-  .temas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
-  .fx{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/5;background:#0b0b0d;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 -1px 0 rgba(255,45,55,.7),0 10px 22px -12px rgba(255,25,35,.5)}
+  .temas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,1.6vw,16px);max-width:900px;margin:22px auto 0}
+  .fx{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:9/16;background:#0b0b0d;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 -1px 0 rgba(255,45,55,.7),0 10px 22px -12px rgba(255,25,35,.5)}
   .fx video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .fx::before{content:"";position:absolute;top:7px;left:10%;right:10%;height:2px;border-radius:2px;background:#fff;z-index:2;box-shadow:0 0 6px #fff,0 0 12px rgba(255,255,255,.6)}
   .fx::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.85));pointer-events:none}
-  .fx span{position:absolute;left:12px;right:12px;bottom:11px;z-index:2;font-weight:700;font-size:.92rem;line-height:1.2;color:#fff}
+  .fx span{position:absolute;left:8px;right:8px;bottom:9px;z-index:2;font-weight:700;font-size:clamp(.66rem,2.6vw,.95rem);line-height:1.2;color:#fff}
   .fx .tag-bono{position:absolute;left:12px;right:auto;bottom:auto;top:18px;font-family:var(--cond);font-style:italic;font-weight:800;font-size:.9rem;color:#fff;background:rgba(150,6,14,.85);border:1px solid var(--rojo2);border-radius:5px;padding:2px 8px}
-  .fx.wide{grid-column:1/-1;aspect-ratio:16/9}
-  @media(min-width:821px){.temas{grid-template-columns:repeat(4,minmax(0,1fr))}.fx.wide{grid-column:span 4;aspect-ratio:3/1}}
 
   /* ===== bonos ===== */
   .bonos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:30px}
@@ -343,7 +316,7 @@
 </head>
 <body>
 
-<!-- PT13: HERO = boceto B (barra, tubos LED, "Píntalo tú", tornamesa 360, 7 esferas, "Cuánto te deja un trabajo") -->
+<!-- PT13: HERO = boceto B (barra, tubos LED, "Píntalo tú", tornamesa 360 autogiro, "Cuánto te deja un trabajo") -->
 <header class="hero" id="pintalo">
   <nav class="top">
     <div class="wrap">
@@ -356,26 +329,23 @@
     <p class="h-sub">Aprende pintura automotriz paso a paso</p>
     <p class="kick"><span>Desde cero</span><span>Técnicas reales</span><span>Resultados profesionales</span></p>
   </div>
-  <div class="vit-cab"><div class="giro" id="giro"><canvas id="giro-canvas" width="422" height="264" role="img" aria-label="Mazda 3 rojo girando 360 grados dentro de la cabina de pintura. Arrastra para girarlo."></canvas><span class="giro-hint" aria-hidden="true">↔ arrastra para girar</span></div><div class="vitrina" id="vitrina">
-      <img class="on" src="img/colores/0-rojo-desk.webp" srcset="img/colores/0-rojo-mob.webp 800w, img/colores/0-rojo-desk.webp 1600w" sizes="(max-width:820px) 100vw, 1040px" width="1600" height="534" alt="El carro pintado en rojo" loading="lazy" decoding="async">
-    </div></div>
-  <p class="vit-info sr" aria-live="polite"><span class="vit-nombre" id="vit-nombre">Rojo</span> · <span class="vit-acabado" id="vit-acabado">Sólido brillante</span></p>
-  <div class="muestras" id="muestras" role="radiogroup" aria-label="Elige el color de la pintura"><button type="button" class="muestra" role="radio" aria-checked="true" data-color="0-rojo" data-acabado="Sólido brillante" data-nombre="Rojo" style="--c:#b3122e"><i></i><span>Rojo</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="1-negro" data-acabado="Sólido brillante" data-nombre="Negro" style="--c:#0b0b0c"><i></i><span>Negro</span></button><button type="button" class="muestra perla" role="radio" aria-checked="false" data-color="2-blanco-perla" data-acabado="Perlado tricapa" data-nombre="Blanco perla" style="--c:linear-gradient(135deg,#ffffff,#ece6f1 60%,#e4eef0)"><i></i><span>Blanco perla</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="3-azul" data-acabado="Metalizado" data-nombre="Azul" style="--c:#1a3fb8"><i></i><span>Azul</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="4-gris-nardo" data-acabado="Sólido" data-nombre="Gris Nardo" style="--c:#8f9496"><i></i><span>Gris Nardo</span></button><button type="button" class="muestra candy" role="radio" aria-checked="false" data-color="5-candy-verde" data-acabado="Candy sobre base metalizada" data-nombre="Candy verde" style="--c:#17a33b"><i></i><span>Candy verde</span></button><button type="button" class="muestra mate" role="radio" aria-checked="false" data-color="6-negro-mate" data-acabado="Mate" data-nombre="Negro mate" style="--c:#26272a"><i></i><span>Negro mate</span></button></div>
+  <div class="vit-cab"><div class="giro" id="giro"><canvas id="giro-canvas" width="422" height="264" role="img" aria-label="Mazda 3 rojo girando 360 grados dentro de la cabina de pintura."></canvas></div></div>
 
   <div class="wrap">
     <article class="cc orden cuanto">
       <h2 class="t">Cuánto te deja un trabajo</h2>
       <p class="cu-cap">Trabajo de ejemplo · Retoque de puerta y guardabarros · ≈ 10 h</p>
       <dl class="filas">
-        <div class="fila"><dt><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><ellipse cx="16" cy="7" rx="9" ry="3.2"/><path d="M7 7v18c0 1.8 4 3.2 9 3.2s9-1.4 9-3.2V7"/></svg>Materiales</dt><dd>$160.000</dd></div>
-        <div class="fila"><dt><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M3 14l14-6 12 5-14 6z"/><path d="M3 14v4l12 6 14-6v-4"/><path d="M3 18v4l12 6 14-6v-4"/><path d="M11 12.5l6 2.6"/></svg>Cobras</dt><dd>$500.000</dd></div>
-        <div class="fila tot"><dt><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 26l9-10 6 5 10-12"/><path d="M20 8h8v8"/></svg><b>Te queda</b></dt><dd class="queda">$340.000</dd></div>
+        <div class="fila"><dt><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><ellipse cx="16" cy="7" rx="9" ry="3.2"/><path d="M7 7v18c0 1.8 4 3.2 9 3.2s9-1.4 9-3.2V7"/></svg>Materiales</dt><dd data-k="materiales">$160.000</dd></div>
+        <div class="fila"><dt><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M3 14l14-6 12 5-14 6z"/><path d="M3 14v4l12 6 14-6v-4"/><path d="M3 18v4l12 6 14-6v-4"/><path d="M11 12.5l6 2.6"/></svg>Cobras</dt><dd data-k="cobras">$500.000</dd></div>
+        <div class="fila tot"><dt><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 26l9-10 6 5 10-12"/><path d="M20 8h8v8"/></svg><b>Te queda</b></dt><dd class="queda" data-k="queda">$340.000</dd></div>
       </dl>
       <ul class="otros">
-        <li><span>Rines restaurados (4) · ≈ 6 h</span><b>Te quedan $200.000</b></li>
-        <li><span>Pintura completa carro pequeño · ≈ 45 h</span><b>$1.400.000</b></li>
+        <li><span>Rines restaurados (4) · ≈ 6 h</span><b>Te quedan <span data-k="rines_queda">$200.000</span></b></li>
+        <li><span>Pintura completa carro pequeño · ≈ 45 h</span><b data-k="completa">$1.400.000</b></li>
       </ul>
-      <p class="nota-ej"><b>Valores de ejemplo, varían según tu ciudad.</b> Pesos colombianos (COP). No incluyen herramientas, compresor ni arriendo de espacio, y no son una promesa de ingresos: lo que cobres depende de tu zona, tus clientes y la calidad de tu trabajo.</p>
+      <p class="nota-ej"><b>Valores de ejemplo, varían según tu ciudad.</b> <span id="cu-moneda">Pesos colombianos (COP).</span> No incluyen herramientas, compresor ni arriendo de espacio, y no son una promesa de ingresos: lo que cobres depende de tu zona, tus clientes y la calidad de tu trabajo.</p>
+      <p class="cu-pais" hidden><label for="cu-pais">País</label> <select id="cu-pais"><option value="CO">Colombia</option></select></p>
     </article>
   </div>
 </header>
@@ -388,13 +358,13 @@
     <p class="lead">{{DESPIECE_LEAD}}</p>
   </div>
   <ol class="etapas" id="etapas" aria-label="Las 7 etapas del taller">
-    <li class="on"><b>01</b><img src="img/dp-frames/mob/f_001.webp?v=pt8" alt="" width="720" height="412" loading="lazy" decoding="async"><span>Golpes</span></li>
-    <li><b>02</b><img src="img/dp-frames/mob/f_013.webp?v=pt8" alt="" width="720" height="412" loading="lazy" decoding="async"><span>Latonería</span></li>
-    <li><b>03</b><img src="img/dp-frames/mob/f_024.webp?v=pt8" alt="" width="720" height="412" loading="lazy" decoding="async"><span>Masilla</span></li>
-    <li><b>04</b><img src="img/dp-frames/mob/f_036.webp?v=pt8" alt="" width="720" height="412" loading="lazy" decoding="async"><span>Masilla lijada</span></li>
-    <li><b>05</b><img src="img/dp-frames/mob/f_048.webp?v=pt8" alt="" width="720" height="412" loading="lazy" decoding="async"><span>Primer</span></li>
-    <li><b>06</b><img src="img/dp-frames/mob/f_059.webp?v=pt8" alt="" width="720" height="412" loading="lazy" decoding="async"><span>Pintura</span></li>
-    <li><b>07</b><img src="img/dp-frames/mob/f_071.webp?v=pt8" alt="" width="720" height="412" loading="lazy" decoding="async"><span>Clear</span></li>
+    <li class="on"><b>01</b><span>Golpes</span></li>
+    <li><b>02</b><span>Latonería</span></li>
+    <li><b>03</b><span>Masilla</span></li>
+    <li><b>04</b><span>Masilla lijada</span></li>
+    <li><b>05</b><span>Primer</span></li>
+    <li><b>06</b><span>Pintura</span></li>
+    <li><b>07</b><span>Clear</span></li>
   </ol>
   <div class="dp-stage" id="dp-stage">
     <canvas id="dp-canvas" width="1280" height="732" role="img" aria-label="El mismo carro pasando por las 7 etapas del taller mientras bajas: golpes, latonería, masilla, masilla lijada, primer, pintura base y clear coat."></canvas>
@@ -424,7 +394,7 @@
 <section class="sec mini-intro">
   <div class="wrap">
     <h2 class="t">No todo es <em>lámina</em></h2>
-    <p class="lead">Baja despacio y mira cómo queda un rin rayado y un faro opaco cuando aplicas lo que enseña el curso.</p>
+    <p class="lead">Baja despacio y mira cómo queda un rin rayado; luego arrastra la barra y mira un faro opaco volver a ser transparente.</p>
   </div>
 </section>
 
@@ -437,11 +407,15 @@
   </div></div>
 </section>
 
-<section class="dp dp-mini" id="escena-faro">
-  <div class="wrap"><div class="cc">
-    <div class="dp-stage-mini" id="scr-faro-stage">
-      <canvas id="scr-faro-canvas" width="960" height="640" role="img" aria-label="Faro delantero de carro rojo que pasa de opaco y amarillento a transparente y restaurado."></canvas>
+<section class="sec ad-sec" id="plasticos">
+  <div class="wrap"><div class="ad-card ad-mini">
+    <div class="ad ad-faro" id="ad-faro">
+      <img class="ad-despues" src="img/mini-frames/faro/desk/f_036.webp" srcset="img/mini-frames/faro/mob/f_036.webp 720w, img/mini-frames/faro/desk/f_036.webp 768w" sizes="(max-width:820px) 100vw, 720px" width="768" height="512" alt="Después: el faro restaurado, transparente" loading="lazy" decoding="async">
+      <div class="ad-antes"><img src="img/mini-frames/faro/desk/f_001.webp" srcset="img/mini-frames/faro/mob/f_001.webp 720w, img/mini-frames/faro/desk/f_001.webp 768w" sizes="(max-width:820px) 100vw, 720px" width="768" height="512" alt="Antes: el faro opaco y amarillento" loading="lazy" decoding="async"></div>
+      <div class="ad-linea" aria-hidden="true"></div>
+      <div class="ad-handle" role="slider" tabindex="0" aria-label="Comparar el faro antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% antes"></div>
     </div>
+    <p class="kick ad-lb"><span>Faro opaco</span><span>Faro transparente</span></p>
     <ul class="dp-piezas"><li>Restauración de plásticos</li><li>Faro opaco</li><li>Faro transparente</li></ul>
   </div></div>
 </section>
@@ -462,6 +436,29 @@
   </div>
 </section>
 
+<!-- TEMAS: grilla lista para <video> (poster = foto; data-src se llena con los clips de Claw) -->
+<section id="temas" class="sec cab">
+  <div class="wrap">
+    <h2 class="t">Las técnicas que <em>cobran</em> los talleres</h2>
+    <p class="lead">Sin experiencia previa: empiezas desde lo básico y llegas a <b>acabados de nivel profesional</b>.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">12</div><div class="l">clases en video HD</div></div>
+      <div class="stat"><div class="n">1–5 h</div><div class="l">cada clase</div></div>
+      <div class="stat"><div class="n">~25</div><div class="l">videos de polarizado (bono)</div></div>
+      <div class="stat"><div class="n">∞</div><div class="l">acceso de por vida</div></div>
+    </div>
+    <!-- PT14a: 6 huecos verticales 9:16 (2 filas x 3) para los videos tipo CapCut; poster = placeholder, data-src llega en otra orden -->
+    <div class="temas">
+      <div class="fx" data-slot="1"><video muted loop playsinline preload="none" poster="img/temas/01-pistola.webp" data-src=""></video><span>Calibración de pistolas</span></div>
+      <div class="fx" data-slot="2"><video muted loop playsinline preload="none" poster="img/temas/02-color.webp" data-src=""></video><span>Colorimetría</span></div>
+      <div class="fx" data-slot="3"><video muted loop playsinline preload="none" poster="img/temas/03-espejo.webp" data-src=""></video><span>Acabados espejo</span></div>
+      <div class="fx" data-slot="4"><video muted loop playsinline preload="none" poster="img/temas/04-rines.webp" data-src=""></video><span>Restauración de rines</span></div>
+      <div class="fx" data-slot="5"><video muted loop playsinline preload="none" poster="img/temas/05-plasticos.webp" data-src=""></video><span>Restauración de plásticos</span></div>
+      <div class="fx" data-slot="6"><video muted loop playsinline preload="none" poster="img/temas/06-masilla.webp" data-src=""></video><span>Aplicación de masilla</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- TU CAMINO (ritmo sugerido, con el contenido real del curso) -->
 <section id="camino" class="sec">
   <div class="wrap">
@@ -475,31 +472,6 @@
       <li><div class="paso"><b class="num">05</b><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="11" r="7"/><path d="M24 7v8M26.5 8.5c-1-1-5-1-5 1s5 1 5 3-4 2-5 1"/><path d="M3 27l7-4c3-1.5 5 0 8 1h6c2 0 2 3 0 3h-7"/><path d="M17 27h9l9-6c2-1 3 1 2 2l-10 9c-2 1.5-4 2-7 2H3"/></svg><div><h3>Tu primer trabajo cobrado</h3><p>Con el PDF <b>Plantilla de costos</b> armas tu cotización y cobras tu primer retoque. Y si quieres sumar otro servicio, tienes el <b>Curso de Polarizado</b> de bono.</p></div></div></li>
     </ol>
     <p class="camino-nota">Ritmo sugerido, no obligatorio: tienes acceso de por vida para avanzar a tu velocidad.</p>
-  </div>
-</section>
-
-<!-- TEMAS: grilla lista para <video> (poster = foto; data-src se llena con los clips de Claw) -->
-<section id="temas" class="sec cab">
-  <div class="wrap">
-    <h2 class="t">Las técnicas que <em>cobran</em> los talleres</h2>
-    <p class="lead">Sin experiencia previa: empiezas desde lo básico y llegas a <b>acabados de nivel profesional</b>.</p>
-    <div class="stats">
-      <div class="stat"><div class="n">12</div><div class="l">clases en video HD</div></div>
-      <div class="stat"><div class="n">1–5 h</div><div class="l">cada clase</div></div>
-      <div class="stat"><div class="n">~25</div><div class="l">videos de polarizado (bono)</div></div>
-      <div class="stat"><div class="n">∞</div><div class="l">acceso de por vida</div></div>
-    </div>
-    <div class="temas">
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/01-pistola.webp" data-src=""></video><span>Calibración de pistolas</span></div>
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/02-color.webp" data-src=""></video><span>Colorimetría</span></div>
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/03-espejo.webp" data-src=""></video><span>Acabados espejo</span></div>
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/04-rines.webp" data-src=""></video><span>Restauración de rines</span></div>
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/05-plasticos.webp" data-src=""></video><span>Restauración de plásticos</span></div>
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/06-masilla.webp" data-src=""></video><span>Aplicación de masilla</span></div>
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/07-lijado.webp" data-src=""></video><span>Tipos de lijas</span></div>
-      <div class="fx"><video muted loop playsinline preload="none" poster="img/temas/08-cabina.webp" data-src=""></video><span>Técnicas avanzadas</span></div>
-      <div class="fx wide"><video muted loop playsinline preload="none" poster="img/temas/09-polarizado.webp" data-src=""></video><span class="tag-bono">Bono</span><span>Polarizado</span></div>
-    </div>
   </div>
 </section>
 
@@ -774,10 +746,11 @@
 })();
 </script>
 <script>
-/* PT9: antes/después deslizable (pointer events: mouse y dedo; teclado con flechas) */
+/* PT9: antes/después deslizable (pointer events: mouse y dedo; teclado con flechas). PT14a: mismo componente para todas las .ad (carro y faro) */
 (function(){
-  var ad=document.getElementById('ad'), h=document.getElementById('ad-handle');
-  if(!ad||!h) return;
+  [].forEach.call(document.querySelectorAll('.ad'),function(ad){
+  var h=ad.querySelector('.ad-handle');
+  if(!h) return;
   var drag=false;
   function set(pct){ pct=Math.max(0,Math.min(100,pct)); ad.style.setProperty('--pos',pct+'%');
     h.setAttribute('aria-valuenow',Math.round(pct)); h.setAttribute('aria-valuetext',Math.round(pct)+'% antes'); }
@@ -790,35 +763,9 @@
     else if(e.key==='ArrowRight'||e.key==='ArrowUp'){ set(v+5); e.preventDefault(); }
     else if(e.key==='Home'){ set(0); e.preventDefault(); } else if(e.key==='End'){ set(100); e.preventDefault(); } });
   set(50);
+  });
 })();
 
-/* PT9: píntalo tú — crossfade 300 ms entre fotos; precarga perezosa al acercarse la sección */
-(function(){
-  var vit=document.getElementById('vitrina'), box=document.getElementById('muestras'), nom=document.getElementById('vit-nombre'), ac=document.getElementById('vit-acabado');
-  if(!vit||!box) return;
-  var SIZES='(max-width:820px) 100vw, 1040px', cache={}, actual=vit.querySelector('img.on'), pedido=0;
-  function ss(c){ return 'img/colores/'+c+'-mob.webp 800w, img/colores/'+c+'-desk.webp 1600w'; }
-  function mk(c,alt){ var im=new Image(); im.decoding='async'; im.sizes=SIZES; im.srcset=ss(c); im.src='img/colores/'+c+'-desk.webp';
-    im.width=1600; im.height=534; im.alt=alt||''; return im; }
-  function precargar(){ [].forEach.call(box.querySelectorAll('.muestra'),function(b){ var c=b.dataset.color; if(!cache[c]) cache[c]=mk(c); }); }
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ precargar(); io.disconnect(); } },{rootMargin:'600px 0px'});
-    io.observe(vit);
-  }
-  function elegir(b){
-    var c=b.dataset.color, n=b.dataset.nombre, mio=++pedido;
-    [].forEach.call(box.querySelectorAll('.muestra'),function(x){ x.setAttribute('aria-checked', x===b?'true':'false'); });
-    if(nom) nom.textContent=n; if(ac) ac.textContent=b.dataset.acabado||'';
-    var im=mk(c,'El carro pintado en '+n.toLowerCase());
-    function poner(){ if(mio!==pedido) return; vit.appendChild(im); requestAnimationFrame(function(){ requestAnimationFrame(function(){
-      im.classList.add('on'); var viejo=actual; actual=im; if(viejo){ viejo.classList.remove('on'); setTimeout(function(){ if(viejo.parentNode && viejo!==actual) viejo.parentNode.removeChild(viejo); },320); } }); }); }
-    if(im.decode) im.decode().then(poner,poner); else { im.onload=poner; im.onerror=poner; }
-  }
-  box.addEventListener('click',function(e){ var b=e.target.closest('.muestra'); if(b) elegir(b); });
-  box.addEventListener('keydown',function(e){ var bs=[].slice.call(box.querySelectorAll('.muestra')), i=bs.indexOf(document.activeElement); if(i<0) return;
-    var j = e.key==='ArrowRight'||e.key==='ArrowDown' ? (i+1)%bs.length : e.key==='ArrowLeft'||e.key==='ArrowUp' ? (i-1+bs.length)%bs.length : -1;
-    if(j>=0){ e.preventDefault(); bs[j].focus(); elegir(bs[j]); } });
-})();
 </script>
 <script>
 /* PT9b: initDespiece COPIADO IDÉNTICO de motos /pack-scroll/ (no editar: si cambia, se vuelve a copiar) */
@@ -870,8 +817,6 @@ function initDespiece(cfg){
 }
 initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:36,w:800,h:800,
   dirMob:'img/mini-frames/rin/mob/',dirDesk:'img/mini-frames/rin/desk/'});
-initDespiece({stage:'scr-faro-stage',canvas:'scr-faro-canvas',n:36,w:960,h:640,
-  dirMob:'img/mini-frames/faro/mob/',dirDesk:'img/mini-frames/faro/desk/'});
 </script>
 <script>
 /* PT9b: transiciones de scroll (vanilla, rAF + IntersectionObserver). Solo transform/opacity/clip-path.
@@ -943,26 +888,60 @@ initDespiece({stage:'scr-faro-stage',canvas:'scr-faro-canvas',n:36,w:960,h:640,
      {{ENGINE_BOOTSTRAP_JS}}
 -->
 <script>
-/* PT12: TORNAMESA 360 en "Píntalo tú". 119 cuadros en bucle (g001..g119), 12.45 fps (1 vuelta ≈ 9.6 s).
-   Arrastre horizontal (pointer events, touch-action:pan-y) ≈ 1 vuelta por ancho de pantalla, inercia al soltar
-   y a los 1.5 s retoma el giro. Póster g001 inmediato; el resto se precarga en orden cuando la sección está a <1 pantalla.
-   Pausa fuera de pantalla. prefers-reduced-motion: quieto (el arrastre sí funciona).
-   Color ≠ rojo: el crossfade de siempre muestra la foto estática encima y el giro se pausa; rojo: vuelve el tornamesa. */
+/* PT14a: "Cuánto te deja un trabajo" por país. Cifras en assets/precios-pais.json; país por Intl timeZone (sin servicios externos),
+   fallback CO; el selector del pie lo cambia a mano (se recuerda en localStorage). Moneda con Intl.NumberFormat. */
 (function(){
-  var cab=document.querySelector('.vit-cab'), box=document.getElementById('giro'), cv=document.getElementById('giro-canvas'), mu=document.getElementById('muestras');
-  if(!cab||!box||!cv||!cv.getContext) return;
-  var N=119, FPS=12.45, movil=window.matchMedia('(max-width:899px)').matches, dir=movil?'assets/giro/m/':'assets/giro/d/';
+  var card=document.querySelector('.cuanto'), sel=document.getElementById('cu-pais');
+  if(!card||!sel||!window.fetch) return;
+  var nota=document.getElementById('cu-moneda');
+  function fmt(v,p){
+    try{ return new Intl.NumberFormat(p.locale,{style:'currency',currency:p.moneda,currencyDisplay:'narrowSymbol',maximumFractionDigits:0}).format(v).replace(/^(\D+?)\s+(?=\d)/,'$1'); }
+    catch(e){ return p.moneda+' '+Math.round(v); }
+  }
+  function detectar(J){
+    try{ var g=localStorage.getItem('utec-pais'); if(g&&J.paises[g]) return g; }catch(e){}
+    var tz=''; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''; }catch(e){}
+    if(J.zonas[tz]) return J.zonas[tz];
+    for(var k in J.prefijos) if(tz.indexOf(k)===0) return J.prefijos[k];
+    return J.por_defecto;
+  }
+  function poner(J,c){
+    var p=J.paises[c]||J.paises[J.por_defecto], v={materiales:p.materiales,cobras:p.cobras,queda:p.cobras-p.materiales,rines_queda:p.rines_queda,completa:p.completa};
+    [].forEach.call(card.querySelectorAll('[data-k]'),function(el){ var k=el.getAttribute('data-k'); if(v[k]!=null) el.textContent=fmt(v[k],p); });
+    var mon=p.moneda==='COP'?'Pesos colombianos (COP)':p.moneda;
+    if(nota) nota.textContent = p.estado==='pendiente' ? mon+'; las cifras de '+p.nombre+' están en estudio.' : mon+'.';
+    sel.value=c;
+  }
+  fetch('assets/precios-pais.json').then(function(r){ return r.json(); }).then(function(J){
+    var ks=Object.keys(J.paises).sort(function(a,b){ return J.paises[a].nombre.localeCompare(J.paises[b].nombre,'es'); });
+    sel.innerHTML=''; ks.forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=J.paises[k].nombre; sel.appendChild(o); });
+    poner(J,detectar(J));
+    sel.parentNode.hidden=false;
+    sel.addEventListener('change',function(){ try{ localStorage.setItem('utec-pais',sel.value); }catch(e){} poner(J,sel.value); });
+  }).catch(function(){});
+})();
+/* PT14a: TORNAMESA autogiro en el hero. 119 cuadros en bucle (g001..g119), 1 vuelta ≈ 6 s (≈19.8 cuadros/s).
+   Entre un cuadro y el siguiente se mezcla el siguiente con alpha (interpolación) → fluido sin sumar peso.
+   Sin arrastre ni colores. Póster g001 inmediato; el resto se precarga en orden cuando el hero está a <1 pantalla
+   y el giro nunca adelanta a un cuadro que no ha llegado (sin saltos). Pausa fuera de pantalla.
+   prefers-reduced-motion: quieto en el póster. */
+(function(){
+  var box=document.getElementById('giro'), cv=document.getElementById('giro-canvas');
+  if(!box||!cv||!cv.getContext) return;
+  var N=119, VUELTA=6, FPS=N/VUELTA, movil=window.matchMedia('(max-width:899px)').matches, dir=movil?'assets/giro/m/':'assets/giro/d/';
   var SW=movil?540:720, SH=movil?264:352, SX=Math.round(SW*(movil?0.11:0.08)), CW=SW-2*SX;   /* se recortan los laterales: 11% móvil, 8% desktop */
   var quieto=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ctx=cv.getContext('2d'), imgs=new Array(N), pos=0, vel=0, drag=null, ultimoToque=-1e9, visible=false, rojo=true, raf=0, t0=0, dibujado=-1, cargando=false;
+  var ctx=cv.getContext('2d'), imgs=new Array(N), pos=0, visible=false, raf=0, t0=0, cargando=false;
   cv.width=CW; cv.height=SH;
   function src(i){ return dir+'g'+String(i+1).padStart(3,'0')+'.webp'; }
   function cargar(i,cb){ var im=new Image(); im.decoding='async'; im.onload=function(){ imgs[i]=im; cb&&cb(); }; im.onerror=function(){ cb&&cb(); }; im.src=src(i); }
+  function cuadro(im,a){ ctx.globalAlpha=a; ctx.drawImage(im,SX,0,CW,SH,0,0,CW,SH); }
   function pintar(){
-    var i=((Math.round(pos)%N)+N)%N, k=i;
-    while(!imgs[k] && k>0) k--;            /* si ese cuadro aún no llega, el último que sí */
-    if(!imgs[k] || k===dibujado) return;
-    ctx.drawImage(imgs[k],SX,0,CW,SH,0,0,CW,SH); dibujado=k;
+    var i=Math.floor(pos), f=pos-i, j=(i+1)%N;
+    if(!imgs[i]) return;
+    cuadro(imgs[i],1);
+    if(f>0.01 && imgs[j]) cuadro(imgs[j],f);
+    ctx.globalAlpha=1;
   }
   cargar(0,pintar);
   function precargar(){
@@ -970,54 +949,21 @@ initDespiece({stage:'scr-faro-stage',canvas:'scr-faro-canvas',n:36,w:960,h:640,
     var sig=1, activos=0;
     (function mas(){ while(activos<4 && sig<N){ activos++; cargar(sig++,function(){ activos--; mas(); }); } })();
   }
-  function girando(){ return visible && rojo && (drag || !quieto || Math.abs(vel)>0.01); }
   function tick(t){
     raf=0; var dt=Math.min(0.1,(t-(t0||t))/1000); t0=t;
-    if(!drag){
-      if(Math.abs(vel)>0.01){ pos+=vel*dt; vel*=Math.pow(0.04,dt); }          /* inercia corta */
-      else { vel=0; if(!quieto && t-ultimoToque>1500) pos+=FPS*dt; }        /* giro automático */
-    }
+    var i=Math.floor(pos), j=(i+1)%N;
+    if(imgs[j]) pos=(pos+FPS*dt)%N;                  /* espera al siguiente cuadro si aún no llega */
+    else pos=i;
     pintar();
-    if(girando()) raf=requestAnimationFrame(tick); else t0=0;
+    if(visible) raf=requestAnimationFrame(tick); else t0=0;
   }
-  function arrancar(){ if(!raf && girando()) raf=requestAnimationFrame(tick); }
-
-  /* arrastre */
-  var FxPx=function(){ return N/Math.max(320,window.innerWidth); };
-  box.addEventListener('pointerdown',function(e){
-    if(!rojo || (e.pointerType==='mouse' && e.button!==0)) return;
-    drag={x:e.clientX,t:performance.now(),id:e.pointerId}; vel=0; precargar();
-    try{ box.setPointerCapture(e.pointerId); }catch(_){}
-    box.classList.add('agarrado'); arrancar();
-  });
-  box.addEventListener('pointermove',function(e){
-    if(!drag||e.pointerId!==drag.id) return;
-    var now=performance.now(), dx=e.clientX-drag.x, df=-dx*FxPx();
-    pos+=df; if(now>drag.t) vel=0.7*vel+0.3*(df/((now-drag.t)/1000));
-    drag.x=e.clientX; drag.t=now;
-    if(Math.abs(dx)>0) box.classList.add('usado');
-  });
-  function soltar(e){
-    if(!drag||e.pointerId!==drag.id) return;
-    if(performance.now()-drag.t>80) vel=0;
-    vel=Math.max(-60,Math.min(60,vel)); drag=null; ultimoToque=performance.now();
-    box.classList.remove('agarrado'); arrancar();
-  }
-  box.addEventListener('pointerup',soltar); box.addEventListener('pointercancel',soltar); box.addEventListener('lostpointercapture',soltar);
+  function arrancar(){ if(!raf && visible && !quieto) raf=requestAnimationFrame(tick); }
 
   /* carga diferida (<1 pantalla) y pausa fuera de pantalla */
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})) precargar(); },{rootMargin:'100% 0px'}).observe(box);
     new IntersectionObserver(function(es){ visible=es[0].isIntersecting; if(visible) arrancar(); }).observe(box);
   } else { visible=true; precargar(); arrancar(); }
-
-  /* colores: rojo = tornamesa; otro = foto estática (crossfade existente) y giro en pausa */
-  cab.classList.add('giro-on');
-  function revisar(){
-    var b=mu&&mu.querySelector('.muestra[aria-checked="true"]'); rojo=!b || b.getAttribute('data-color')==='0-rojo';
-    cab.classList.toggle('giro-on',rojo); if(rojo){ ultimoToque=-1e9; arrancar(); }
-  }
-  if(mu && 'MutationObserver' in window) new MutationObserver(revisar).observe(mu,{subtree:true,attributes:true,attributeFilter:['aria-checked']});
 })();
 </script>
 <script>
