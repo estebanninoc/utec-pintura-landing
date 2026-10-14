@@ -9,6 +9,7 @@
 <!-- pt14a-correcciones -->
 <!-- pt14b-giro-precios -->
 <!-- pt14c-antes-despues -->
+<!-- pt14d-carro-integrado -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -155,6 +156,9 @@
   .etapas li.on::before{opacity:1;box-shadow:0 0 6px #fff,0 0 12px rgba(255,255,255,.7)}
   .dp-stage{position:relative;max-width:820px;margin:12px auto 0}
   .dp-stage canvas{display:block;width:100%;height:auto;aspect-ratio:1280/732}
+  /* PT14d: el carro no se mueve entre etapas → una sola máscara (carro recortado + franja de piso que se desvanece = sombra/reflejo)
+     sobre el canvas: sin caja negra, el taller se ve detrás. Frames y JS del scrub intactos. */
+  .dp-stage canvas{-webkit-mask-image:url(img/dp-frames/carro-mask.webp);mask-image:url(img/dp-frames/carro-mask.webp);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
   .dp-bar{max-width:300px;height:3px;border-radius:99px;background:#1c1c21;margin:10px auto 0;overflow:hidden}
   .dp-bar i{display:block;height:100%;width:calc(var(--t,0)*100%);background:var(--rojo2);box-shadow:0 0 8px var(--rojo2)}
   .fx-note{margin-top:10px;color:var(--mut);font-size:.9rem;padding:0 20px}
