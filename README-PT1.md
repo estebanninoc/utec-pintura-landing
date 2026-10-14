@@ -44,3 +44,18 @@ Pendiente: precio real (US$XX), links de pago (#PAGO-PENDIENTE), pixel, clips de
 - Regenerar: `node render.cjs <puerto> 71 /tmp/pt1w/seq-desk negro desk` y `node render.cjs <puerto> 137 /tmp/pt1w/seq-mob negro mob`,
   luego `tools/etapas-render/build_set.sh negro img/pt-frames-negro`.
 - La variante taller (`img/pt-frames/`) NO se rehízo en PT7 (no hay fotos v7 de taller): sigue con las etapas viejas.
+
+## PT8 — scrub igual al despiece de motos (sin pin, 71 cuadros continuos, móvil horizontal)
+
+- Mecanismo: el IIFE "despiece" de motos /pack-scroll/ copiado TAL CUAL en template/index.html (un solo #dp-stage,
+  canvas 1280x732, sin pin, avanza mientras el carro sube de abajo hasta el 45% de la pantalla; carga 1+N y luego de 6
+  en 6 cada 90 ms; dir mob si max-width:720px). Único cambio: `?v=pt8` en src() (cache-buster pedido).
+  CSS .dp/.dp-stage/.dp-bar/.dp-piezas = líneas de motos tal cual.
+- Fuera: escena móvil vertical (#escena-pt-mob/#scr-pt-stage, initMotor+LUT_PT), su texto duplicado, el switch PT_SCRUB
+  y la carga de engine/scrub.js. Los tokens del kit que ya no se usan quedan en un comentario HTML para que
+  tools/build.py siga corriendo sin tocarlo.
+- Cuadros: img/dp-frames/{desk,mob} (71 + 71, 1280x732 y 720x412 = medidas de motos), con
+  `tools/etapas-render/build_pt8.sh <puerto>`: render.html en modo continuo (sin holds, sin chips ni puntos, barrido
+  izquierda→derecha con borde del 65% del ancho, easing smoothstep, 6 transiciones parejas; cuadro 1 = Golpes,
+  71 = Clear coat) → clip a 1 fps → tools/frames.sh despiece.
+- Borrados img/pt-frames y img/pt-frames-negro (sets viejos).

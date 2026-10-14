@@ -9,6 +9,10 @@ var SET=new URLSearchParams(location.search).get('set')||'taller';
    (scale-to-cover 1536x1024 -> 1054x703, crop 403 al centro = x 474..1061 del lienzo), así el carro entra ENTERO. */
 var LAYOUT=new URLSearchParams(location.search).get('layout')||'desk';
 var RECT=null, CHIP_Y=118;
+/* PT8 (?modo=continuo, por defecto): como el despiece de motos -> SIN holds, SIN chips/puntos, 6 transiciones repartidas
+   parejo en los N cuadros (cuadro 1 = Golpes, cuadro N = Clear coat), borde de barrido MUY ancho (65% del ancho) */
+var MODO=new URLSearchParams(location.search).get('modo')||'continuo';
+var FEATHER = MODO==='continuo' ? 0.65 : 0.18;
 var FILES=['1-golpes','2-latoneria','3-masilla','4-masilla-lijada','5-primer','6-pintura-mate','7-final'];
 var W=1536,H=1024, imgs=[], RED='#C8102E';
 /* linea de tiempo en "unidades": hold inicial largo, 6 transiciones, holds medios, hold final largo */
@@ -30,7 +34,7 @@ function wipe(ctx,A,B,t){
   var R=RECT; ctx.globalAlpha=1; ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
   ctx.drawImage(A,R.sx,R.sy,R.sw,R.sh,R.x,R.y,R.w,R.h);
   if(t<=0) return; if(t>=1){ ctx.drawImage(B,R.sx,R.sy,R.sw,R.sh,R.x,R.y,R.w,R.h); return; }
-  var FE=R.w*0.18, pos=R.x-FE/2+t*(R.w+FE);
+  var FE=R.w*FEATHER, pos=R.x-FE/2+t*(R.w+FE);
   ox.clearRect(0,0,W,H); ox.globalCompositeOperation='source-over'; ox.drawImage(B,R.sx,R.sy,R.sw,R.sh,R.x,R.y,R.w,R.h);
   ox.globalCompositeOperation='destination-in';
   var g=ox.createLinearGradient(pos-FE/2,0,pos+FE/2,0); g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(1,'rgba(0,0,0,0)');
@@ -76,6 +80,12 @@ function aNegro(ctx){
 }
 function frame(k,N){
   var ctx=document.getElementById('c').getContext('2d');
+  if(MODO==='continuo'){
+    var u=(k-1)/(N-1)*6, a=Math.min(5,Math.floor(u)), t=ease(u-a);
+    wipe(ctx,imgs[a],imgs[a+1],t);
+    if(SET==='negro') aNegro(ctx);
+    return document.getElementById('c').toDataURL('image/jpeg',0.95);
+  }
   var u=(k-1)/(N-1)*TOTAL, s=at(u);
   wipe(ctx,imgs[s.a],imgs[s.b],s.t);
   if(SET==='negro') aNegro(ctx);

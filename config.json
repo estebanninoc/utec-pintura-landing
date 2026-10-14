@@ -63,8 +63,8 @@
       "n": 71,
       "w": 1280,
       "h": 732,
-      "dirMob": "img/pt-frames/desk/",
-      "dirDesk": "img/pt-frames/desk/",
+      "dirMob": "img/dp-frames/mob/",
+      "dirDesk": "img/dp-frames/desk/",
       "chips": [
         "1 · Golpes",
         "2 · Latonería",
@@ -83,8 +83,8 @@
       "n": 137,
       "w": 403,
       "h": 703,
-      "dirMob": "img/pt-frames/mob/",
-      "dirDesk": "img/pt-frames/mob/",
+      "dirMob": "img/dp-frames/mob/",
+      "dirDesk": "img/dp-frames/desk/",
       "lutRef": "LUT_PT",
       "chips": [
         "1 · Golpes",
@@ -97,5 +97,6 @@
       ],
       "aria_label": "El mismo carro pasando por las 7 etapas del taller mientras bajas: golpes, latonería, masilla, masilla lijada, primer, pintura base y clear coat."
     }
-  ]
+  ],
+  "_comentario_pt8": "PT8: el scrub usa el IIFE 'despiece' de motos copiado en template/index.html (img/dp-frames/{desk,mob}, 71+71, ?v=pt8). La entrada 'motor-mini' queda solo porque tools/build.py la exige; no se usa."
 }

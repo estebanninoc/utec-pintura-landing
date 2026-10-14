@@ -15,10 +15,6 @@
 <link rel="icon" type="image/svg+xml" href="img/logo-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-<!-- PT2: variante del scrub "Un carro, 7 etapas". UNA sola línea para cambiar:
-     'negro'  = img/pt-frames-negro/ (fondo negro puro, se funde con la página)  [por defecto]
-     'taller' = img/pt-frames/       (fondo taller, canvas con esquinas redondeadas) -->
-<script>var PT_SCRUB='negro';document.documentElement.classList.add('scrub-'+PT_SCRUB);</script>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-tight.woff2" crossorigin>
 <style>
@@ -338,8 +334,8 @@
   .dp-stage{position:relative;max-width:1080px;margin:26px auto 0}
   .dp-stage canvas{display:block;width:100%;height:auto;aspect-ratio:1280/732}
   .dp-bar{max-width:280px;height:3px;border-radius:99px;background:#1c1c21;margin:18px auto 0;overflow:hidden}
-  .dp-bar i{display:block;height:100%;width:calc(var(--t,0)*100%);background:var(--red)}
-  .dp-piezas{list-style:none;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px auto 0;max-width:640px;padding:0 20px}
+  .dp-bar i{display:block;height:100%;width:calc(var(--t,0)*100%);background:#fff}
+  .dp-piezas{list-style:none;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:24px auto 0;max-width:640px;padding:0 20px}
   .dp-piezas li{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-family:var(--disp);font-weight:800;font-size:.8rem}
   @media(max-width:820px){.dp-stage{width:100%;margin-left:0;padding:0 4px}}
     @media(max-width:820px){
@@ -351,7 +347,6 @@
       .pack-intro{padding-bottom:20px}
     @media(max-width:820px){.pack-intro{padding-bottom:8px}}
   .dp-mini{padding:8px 0 10px;overflow:visible}
-  #escena-pt-mob{padding-bottom:16px}
     .post-despiece{padding-top:12px}
   /* dp-scrub: carril del carril sticky. ORDEN AZ1 (Esteban): es landing de venta rápida,
      el usuario debe bajar rápido — bajado de 170vh a 110vh y el canvas de 78vh a 55vh/45vh
@@ -362,7 +357,6 @@
   .dp-stage-mini{position:sticky;top:10vh;text-align:center;margin:0 auto}
   .dp-stage-mini canvas{display:inline-block;max-width:100%;max-height:55vh;width:auto;height:auto}
   @media(prefers-reduced-motion:reduce){.dp-scrub{height:auto}.dp-stage-mini{position:relative;top:0}}
-    #scr-pt-stage{position:relative;top:0}
   /* GALERÍA con video local */
   .fx video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
   .fx{cursor:default}
@@ -383,13 +377,6 @@
     #contenido-completo{padding-top:24px}
   }
   /* ===== PT1: piezas propias de la landing de pintura (no tocan engine/scrub.js) ===== */
-    @media(max-width:720px){.only-desk{display:none!important}}
-  @media(min-width:721px){.only-mob{display:none!important}}
-  #scr-pt-stage canvas{height:64vh;max-height:64vh;width:auto;max-width:100%;border-radius:14px}
-  .dp-stage canvas{border-radius:14px}
-  /* PT2 variante negro: sin esquinas ni caja; la sección queda en #000 puro como la página */
-  .scrub-negro #despiece,.scrub-negro #escena-pt-mob,.scrub-negro .pack-intro{background:#000}
-  .scrub-negro .dp-stage canvas,.scrub-negro #scr-pt-stage canvas{border-radius:0}
   /* slides del celular con foto (no video) */
   .pv .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
   /* cinta de temas (texto, sin logos) */
@@ -500,8 +487,9 @@
   </div>
 </header>
 
-<!-- SCRUB 7 ETAPAS (desktop): el carro pasa por las 7 etapas mientras lo pasas, sin quedarse pegado -->
-<section class="dp only-desk" id="despiece">
+<!-- pt8-motos-scrub -->
+<!-- SCRUB 7 ETAPAS: mismo bloque "despiece" de motos (sin pin), desktop y celular -->
+<section class="dp" id="despiece">
   <div class="wrap">
     <div class="eyebrow">{{DESPIECE_EYEBROW}}</div>
     <h2 class="title">{{DESPIECE_TITLE}}</h2>
@@ -513,24 +501,6 @@
   <div class="dp-bar" id="dp-bar" aria-hidden="true"><i></i></div>
   <ul class="dp-piezas">{{DESPIECE_CHIPS_HTML}}</ul>
 </section>
-
-<!-- QUÉ VAS A APRENDER -->
-<section class="pack-intro only-mob">
-  <div class="wrap">
-    <div class="eyebrow">{{PACK_INTRO_EYEBROW}}</div>
-    <h2 class="title">{{PACK_INTRO_TITLE}}</h2>
-    <p class="lead">{{PACK_INTRO_LEAD}}</p>
-  </div>
-</section>
-
-<section class="dp dp-mini only-mob" id="escena-pt-mob">
-  <div class="dp-stage-mini" id="scr-pt-stage">
-    <canvas id="scr-pt-canvas" width="{{MOTOR_W}}" height="{{MOTOR_H}}" role="img" aria-label="{{MOTOR_ARIA}}"></canvas>
-  </div>
-  <ul class="dp-piezas">{{MOTOR_CHIPS_HTML}}</ul>
-</section>
-
-
 
 <section class="post-despiece">
   <div class="wrap">
@@ -795,23 +765,45 @@
 })();
 
 </script>
-<script src="engine/scrub.js"></script>
 <script>
-var LUT_PT=[1,137];
-/* PT2: config.json apunta a img/pt-frames/ (taller); con PT_SCRUB='negro' se cambia SOLO la carpeta de
-   cuadros antes de llamar al engine (engine/scrub.js intacto). */
-if(window.PT_SCRUB==='negro'){
-  var _ptDir=function(c){ ['dirMob','dirDesk'].forEach(function(k){ c[k]=c[k].replace('img/pt-frames/','img/pt-frames-negro/'); }); return c; };
-  var _ptE=initEscena, _ptM=initMotor;
-  initEscena=function(c){ return _ptE(_ptDir(c)); };
-  initMotor=function(c){ return _ptM(_ptDir(c)); };
-}
+/* despiece: el cuadro sigue la posición del carro en pantalla (sin pin) — PT8: copiado tal cual del despiece de motos /pack-scroll/:
+   entra con golpes por abajo y queda en clear coat cuando llega al 45% de la pantalla */
 (function(){
-  var mob=window.matchMedia('(max-width:720px)').matches;
-  var quitar=document.getElementById(mob?'dp-stage':'scr-pt-stage');
-  if(quitar) quitar.parentNode.removeChild(quitar);
+  var stage=document.getElementById('dp-stage'), canvas=document.getElementById('dp-canvas'), bar=document.getElementById('dp-bar');
+  if(!stage||!canvas) return;
+  var ctx=canvas.getContext('2d'), N=71;
+  var dir = window.matchMedia('(max-width:720px)').matches ? 'img/dp-frames/mob/' : 'img/dp-frames/desk/';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var imgs=[], ok=[], want=1;
+  function src(i){ return dir+'f_'+String(i).padStart(3,'0')+'.webp?v=pt8'; }
+  function draw(i){ if(ok[i]){ ctx.clearRect(0,0,1280,732); ctx.drawImage(imgs[i],0,0,1280,732); } }
+  function show(i){
+    want=i; if(ok[i]) return draw(i);
+    for(var d=1;d<N;d++){ if(ok[i-d]) return draw(i-d); if(ok[i+d]) return draw(i+d); }
+  }
+  function load(i){ if(imgs[i]) return; var im=new Image(); im.decoding='async'; im.onload=function(){ ok[i]=true; if(i===want) draw(i); }; im.src=src(i); imgs[i]=im; }
+  if(reduced){ load(N); want=N; if(bar) bar.style.setProperty('--t',1); return; }
+  load(1); load(N);
+  var rest=[]; for(var q=2;q<N;q++) rest.push(q);
+  (function more(){ rest.splice(0,6).forEach(load); if(rest.length) setTimeout(more,90); })();
+  var busy=false;
+  function tick(){
+    busy=false;
+    var r=stage.getBoundingClientRect(), vh=window.innerHeight;
+    /* p=0 cuando el carro asoma por abajo; p=1 cuando su centro llega al 45% de la pantalla */
+    var start=vh, end=vh*0.45 - r.height/2;
+    var p=(start - r.top)/(start - end); p=Math.max(0,Math.min(1,p));
+    if(bar) bar.style.setProperty('--t',p.toFixed(3));
+    show(1+Math.round(p*(N-1)));
+  }
+  function req(){ if(!busy){ busy=true; requestAnimationFrame(tick); } }
+  window.addEventListener('scroll',req,{passive:true}); window.addEventListener('resize',req); tick();
 })();
-{{ENGINE_BOOTSTRAP_JS}}
 </script>
+<!-- kit landing-kit: tokens sin uso desde PT8 (escena móvil vertical + engine/scrub.js reemplazados por el IIFE de motos).
+     Quedan aquí solo para que tools/build.py siga funcionando sin tocarlo:
+     {{PACK_INTRO_EYEBROW}} {{PACK_INTRO_TITLE}} {{PACK_INTRO_LEAD}} {{MOTOR_W}} {{MOTOR_H}} {{MOTOR_ARIA}} {{MOTOR_CHIPS_HTML}}
+     {{ENGINE_BOOTSTRAP_JS}}
+-->
 </body>
 </html>
