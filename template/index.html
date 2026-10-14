@@ -7,6 +7,7 @@
 <!-- pt12-giro -->
 <!-- pt13-boceto-total -->
 <!-- pt14a-correcciones -->
+<!-- pt14b-giro-precios -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -416,7 +417,7 @@
       <div class="ad-handle" role="slider" tabindex="0" aria-label="Comparar el faro antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% antes"></div>
     </div>
     <p class="kick ad-lb"><span>Faro opaco</span><span>Faro transparente</span></p>
-    <ul class="dp-piezas"><li>Restauración de plásticos</li><li>Faro opaco</li><li>Faro transparente</li></ul>
+    <ul class="dp-piezas"><li>Restauración de plásticos</li></ul>
   </div></div>
 </section>
 
@@ -852,17 +853,19 @@ initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:36,w:800,h:800,
   }
 
   /* H4 contadores que suben (órdenes de trabajo) */
-  function fmt(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+  /* PT14b: acepta cualquier separador de miles (precios por país) y si el país cambia la cifra a mitad de la subida, termina en la nueva (data-fin) */
+  function fmt(n,sep){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,sep); }
   var ioN=new IntersectionObserver(function(es){ es.forEach(function(e){
     if(!e.isIntersecting) return; ioN.unobserve(e.target);
     [].forEach.call(e.target.querySelectorAll('dd'),function(dd){
-      var m=dd.textContent.match(/^(\D*)([\d.]+)(.*)$/); if(!m) return;
-      var fin=parseInt(m[2].replace(/\./g,''),10), t0=performance.now(), D=1300;
+      var txt=dd.textContent, m=txt.match(/^(\D*)(\d[\d.,\s\u00a0\u202f]*\d|\d)(\D*)$/); if(!m) return;
+      var sep=(m[2].match(/\D/)||['.'])[0], fin=parseInt(m[2].replace(/\D/g,''),10), t0=performance.now(), D=1300;
       /* ancho fijo = el de la cifra final, para que nada se mueva mientras sube */
       dd.style.width=dd.getBoundingClientRect().width+'px'; dd.style.whiteSpace='nowrap'; dd.textContent=m[1]+'0'+m[3];
-      requestAnimationFrame(function paso(t){ var k=Math.max(0,Math.min(1,(t-t0)/D)), ez=1-Math.pow(1-k,3);
-        if(k<1){ dd.textContent=m[1]+fmt(fin*ez)+m[3]; requestAnimationFrame(paso); }
-        else { dd.textContent=m[0]; dd.style.width=''; dd.style.whiteSpace=''; } });
+      requestAnimationFrame(function paso(t){ var k=Math.max(0,Math.min(1,(t-t0)/D)), ez=1-Math.pow(1-k,3), nf=dd.getAttribute('data-fin');
+        if(nf && nf!==txt){ dd.textContent=nf; dd.style.width=''; dd.style.whiteSpace=''; return; }
+        if(k<1){ dd.textContent=m[1]+fmt(fin*ez,sep)+m[3]; requestAnimationFrame(paso); }
+        else { dd.textContent=txt; dd.style.width=''; dd.style.whiteSpace=''; } });
     });
   }); },{threshold:.35});
   [].forEach.call(document.querySelectorAll('.orden dl'),function(dl){ ioN.observe(dl); });
@@ -906,10 +909,11 @@ initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:36,w:800,h:800,
     return J.por_defecto;
   }
   function poner(J,c){
-    var p=J.paises[c]||J.paises[J.por_defecto], v={materiales:p.materiales,cobras:p.cobras,queda:p.cobras-p.materiales,rines_queda:p.rines_queda,completa:p.completa};
-    [].forEach.call(card.querySelectorAll('[data-k]'),function(el){ var k=el.getAttribute('data-k'); if(v[k]!=null) el.textContent=fmt(v[k],p); });
+    var p=J.paises[c]||J.paises[J.por_defecto], v={materiales:p.materiales,cobras:p.cobras,queda:p.queda!=null?p.queda:p.cobras-p.materiales,rines_queda:p.rines_queda,completa:p.completa};
+    [].forEach.call(card.querySelectorAll('[data-k]'),function(el){ var k=el.getAttribute('data-k'); if(v[k]!=null){ var x=fmt(v[k],p); el.setAttribute('data-fin',x); el.textContent=x; } });
     var mon=p.moneda==='COP'?'Pesos colombianos (COP)':p.moneda;
-    if(nota) nota.textContent = p.estado==='pendiente' ? mon+'; las cifras de '+p.nombre+' están en estudio.' : mon+'.';
+    if(p.moneda!=='COP') try{ mon='Moneda: '+new Intl.DisplayNames(['es'],{type:'currency'}).of(p.moneda)+' ('+p.moneda+')'; }catch(e){}
+    if(nota) nota.textContent = mon+'.'+(p.estado==='real'?'':' Cifras estimadas para '+p.nombre+'.');
     sel.value=c;
   }
   fetch('assets/precios-pais.json').then(function(r){ return r.json(); }).then(function(J){
@@ -920,7 +924,7 @@ initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:36,w:800,h:800,
     sel.addEventListener('change',function(){ try{ localStorage.setItem('utec-pais',sel.value); }catch(e){} poner(J,sel.value); });
   }).catch(function(){});
 })();
-/* PT14a: TORNAMESA autogiro en el hero. 119 cuadros en bucle (g001..g119), 1 vuelta ≈ 6 s (≈19.8 cuadros/s).
+/* PT14b: TORNAMESA autogiro en el hero. 288 cuadros en bucle (g001..g288, 24 fps reales interpolados de loop.mp4), 1 vuelta = 12 s.
    Entre un cuadro y el siguiente se mezcla el siguiente con alpha (interpolación) → fluido sin sumar peso.
    Sin arrastre ni colores. Póster g001 inmediato; el resto se precarga en orden cuando el hero está a <1 pantalla
    y el giro nunca adelanta a un cuadro que no ha llegado (sin saltos). Pausa fuera de pantalla.
@@ -928,7 +932,7 @@ initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:36,w:800,h:800,
 (function(){
   var box=document.getElementById('giro'), cv=document.getElementById('giro-canvas');
   if(!box||!cv||!cv.getContext) return;
-  var N=119, VUELTA=6, FPS=N/VUELTA, movil=window.matchMedia('(max-width:899px)').matches, dir=movil?'assets/giro/m/':'assets/giro/d/';
+  var N=288, VUELTA=12, FPS=N/VUELTA, movil=window.matchMedia('(max-width:899px)').matches, dir=movil?'assets/giro/m/':'assets/giro/d/';
   var SW=movil?540:720, SH=movil?264:352, SX=Math.round(SW*(movil?0.11:0.08)), CW=SW-2*SX;   /* se recortan los laterales: 11% móvil, 8% desktop */
   var quieto=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var ctx=cv.getContext('2d'), imgs=new Array(N), pos=0, visible=false, raf=0, t0=0, cargando=false;
@@ -947,7 +951,7 @@ initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:36,w:800,h:800,
   function precargar(){
     if(cargando) return; cargando=true;
     var sig=1, activos=0;
-    (function mas(){ while(activos<4 && sig<N){ activos++; cargar(sig++,function(){ activos--; mas(); }); } })();
+    (function mas(){ while(activos<6 && sig<N){ activos++; cargar(sig++,function(){ activos--; mas(); }); } })();
   }
   function tick(t){
     raf=0; var dt=Math.min(0.1,(t-(t0||t))/1000); t0=t;
