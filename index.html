@@ -1,5 +1,6 @@
 <!doctype html>
 <!-- pt1-v1 -->
+<!-- pt9-custom-shop -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -15,6 +16,7 @@
 <link rel="icon" type="image/svg+xml" href="img/logo-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preload" as="font" type="font/woff2" href="fonts/anton.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-tight.woff2" crossorigin>
 <style>
@@ -409,6 +411,152 @@
     .bono.big .bono-tx{padding:22px}
     .bono ul{grid-template-columns:1fr}
   }
+
+  /* =====================================================================================
+     PT9: formato CUSTOM SHOP (estilo Kindig-It / West Coast Customs). Solo CSS + decoración liviana.
+     El bloque scrub (#despiece, su JS y sus cuadros) NO se toca: solo se le fija fondo #000 puro
+     para que los cuadros (fondo negro) sigan fundiéndose sin caja sobre el gris carbón de la página.
+     ===================================================================================== */
+  @font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/anton.woff2) format('woff2')}
+  :root{
+    --carbon:#0c0c0e; --carbon2:#141417; --chrome:#d3d7dd; --chrome-d:#9aa1ab; --steel:#7d848e; --steel-d:#3f444b;
+    --tape:#f2c230; --masking:#e8dbb4; --masking-d:#cfbf93;
+    --shop:"Anton","Inter Tight",Impact,"Arial Narrow",sans-serif;
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  body{background-color:var(--carbon);background-image:var(--grain)}
+  h1,h2,h3{font-family:var(--shop);font-weight:400;letter-spacing:.005em;line-height:1.02;text-transform:uppercase}
+  header h1{font-size:clamp(2.6rem,8vw,4.6rem);letter-spacing:.01em}
+  h2.title{font-size:clamp(2.1rem,6vw,3.4rem)}
+  .card h3,.bono h3,.step h3{letter-spacing:.02em;font-size:1.25rem}
+  /* sin glow neón: sombras duras de taller en vez de halos */
+  header{background:none}
+  .device{filter:drop-shadow(0 18px 30px rgba(0,0,0,.7))}
+  .device::before{display:none}
+  .btn{box-shadow:0 4px 0 #6c7179;border-radius:10px;text-transform:uppercase;font-family:var(--shop);font-weight:400;letter-spacing:.04em}
+  .btn:hover{box-shadow:0 6px 0 #6c7179}
+  #btn-hero,#btn-pago,.buybar .btn{box-shadow:0 4px 0 #5a0715}
+  #btn-hero:hover,#btn-pago:hover,.buybar .btn:hover{box-shadow:0 6px 0 #5a0715}
+  .price-card{box-shadow:0 10px 0 #000;border-color:var(--chrome-d)}
+  header h1 .cut::after{background:var(--tape);transform:skewX(-12deg);height:.12em}
+  .pill{border-color:var(--steel)}
+  .eyebrow{font-family:var(--shop);font-weight:400;letter-spacing:.22em;color:var(--tape);font-size:.95rem}
+  .badge{background:linear-gradient(180deg,var(--carbon2),#0a0a0b);border-color:var(--steel-d)}
+  .badge .n{font-family:var(--shop);font-weight:400}
+  /* el scrub se queda en negro puro (sus cuadros son fondo #000) */
+  #despiece{background:#000}
+  /* placa (número de sección estilo placa metálica con remaches) */
+  .placa,#despiece .eyebrow::before,#temas .eyebrow::before,#bonos .eyebrow::before{
+    display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:40px;padding:0 14px;margin:0 0 14px;
+    font-family:var(--shop);font-size:1.6rem;letter-spacing:.06em;color:#15171a;border-radius:7px;border:2px solid #5b6169;
+    background:radial-gradient(circle at 8px 50%,#5b6169 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 8px) 50%,#5b6169 2.5px,transparent 3px),linear-gradient(180deg,#eef0f3,var(--chrome) 45%,var(--chrome-d));
+    box-shadow:0 3px 0 #000}
+  #despiece .eyebrow::before,#temas .eyebrow::before,#bonos .eyebrow::before{display:flex;width:max-content;letter-spacing:.06em}
+  #despiece .eyebrow::before{content:"01";margin:0 auto 14px}
+  #temas .eyebrow::before{content:"07"}
+  #bonos .eyebrow::before{content:"08"}
+  .placa-row{display:block}
+  /* separador "cinta de enmascarar": franja beige con bordes rasgados */
+  .tape-sep{position:relative;height:34px;margin:6px auto;max-width:1180px;width:92%;transform:rotate(-1.2deg);
+    background:repeating-linear-gradient(90deg,rgba(0,0,0,.035) 0 2px,transparent 2px 7px),linear-gradient(180deg,#efe4c3,var(--masking) 55%,var(--masking-d));
+    clip-path:polygon(0 8%,2% 0,4% 14%,6% 2%,8% 10%,10% 0,92% 0,94% 12%,96% 0,98% 10%,100% 4%,100% 92%,98% 100%,96% 86%,94% 100%,92% 90%,10% 100%,8% 88%,6% 100%,4% 86%,2% 100%,0 90%);
+    box-shadow:0 2px 0 rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}
+  .tape-sep span{font-family:var(--shop);font-size:.82rem;letter-spacing:.3em;color:#6d5f3b;opacity:.75;white-space:nowrap;overflow:hidden}
+  .tape-sep.alt{transform:rotate(.9deg)}
+  /* sello / stencil */
+  .sello{display:inline-block;font-family:var(--shop);font-size:1.05rem;letter-spacing:.18em;color:var(--red-tx);border:3px solid var(--red-tx);
+    border-radius:6px;padding:3px 12px 2px;transform:rotate(-7deg);opacity:.88;text-transform:uppercase;
+    -webkit-mask-image:var(--grain-mask);mask-image:var(--grain-mask)}
+  .sello.amarillo{color:var(--tape);border-color:var(--tape)}
+  :root{--grain-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+  .shop{position:relative}
+  .shop .lead{font-size:1.08rem}
+  .shop p,.shop li{font-size:max(15px,1rem)}
+  .sec-head{display:flex;flex-direction:column;align-items:flex-start}
+  .sec-head .sello{margin-top:6px}
+
+  /* ---------- 02 ANTES / DESPUÉS ---------- */
+  .ad{position:relative;margin-top:28px;aspect-ratio:1600/534;background:#000;border:1px solid var(--steel-d);border-radius:14px;overflow:hidden;
+    touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize;--pos:50%}
+  .ad img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+  .ad .ad-antes{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+  .ad-tag{position:absolute;top:12px;z-index:3;font-family:var(--shop);letter-spacing:.2em;font-size:.95rem;padding:4px 10px 3px;border-radius:5px;background:rgba(0,0,0,.72);border:1.5px solid var(--chrome-d);color:#fff}
+  .ad-tag-a{left:12px}.ad-tag-d{right:12px;color:var(--tape);border-color:var(--tape)}
+  .ad-linea{position:absolute;top:0;bottom:0;left:var(--pos);width:3px;margin-left:-1.5px;background:var(--chrome);z-index:2;box-shadow:0 0 0 1px rgba(0,0,0,.5)}
+  .ad-handle{position:absolute;top:50%;left:var(--pos);z-index:4;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;
+    background:linear-gradient(180deg,#f2f4f6,var(--chrome-d));border:2px solid #2a2d31;box-shadow:0 3px 0 #000;display:flex;align-items:center;justify-content:center;cursor:ew-resize}
+  .ad-handle::before{content:"◀ ▶";font-size:.7rem;color:#15171a;letter-spacing:-.05em}
+  .ad-handle:focus-visible{outline:3px solid var(--tape);outline-offset:3px}
+  .ad-nota{color:var(--mut);margin-top:12px}
+  @media(max-width:820px){.ad{aspect-ratio:3/2;margin-left:-20px;margin-right:-20px;border-radius:0;border-left:0;border-right:0}.ad img{object-position:30% 60%}}
+
+  /* ---------- 03 PÍNTALO TÚ ---------- */
+  .vitrina{position:relative;margin-top:28px;aspect-ratio:1600/534;background:#000;border:1px solid var(--steel-d);border-radius:14px;overflow:hidden}
+  .vitrina img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s ease}
+  .vitrina img.on{opacity:1}
+  .vitrina .vit-nombre{position:absolute;left:14px;bottom:12px;z-index:2;font-family:var(--shop);letter-spacing:.14em;font-size:1rem;color:#fff;background:rgba(0,0,0,.6);padding:3px 10px;border-radius:5px}
+  .muestras{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 18px;margin-top:22px}
+  .muestra{background:none;border:0;color:var(--tx);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;width:76px;font:inherit;padding:0}
+  .muestra i{display:block;width:48px;height:48px;border-radius:50%;background:var(--c);border:3px solid #2a2d31;box-shadow:inset 0 -6px 10px rgba(0,0,0,.35),inset 0 6px 8px rgba(255,255,255,.28),0 3px 0 #000;transition:transform .15s}
+  .muestra.mate i{box-shadow:0 3px 0 #000}
+  .muestra span{font-size:.82rem;font-weight:700;line-height:1.15;text-align:center;color:var(--mut)}
+  .muestra[aria-checked="true"] i{border-color:var(--tape);transform:translateY(-3px)}
+  .muestra[aria-checked="true"] span{color:#fff}
+  .muestra:focus-visible i{outline:3px solid var(--tape);outline-offset:3px}
+  @media(max-width:820px){.vitrina{margin-left:-20px;margin-right:-20px;border-radius:0;border-left:0;border-right:0}.muestra{width:68px}}
+
+  /* ---------- 04 MUESTRARIO DE ACABADOS ---------- */
+  .carta{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:30px}
+  .chip{background:#f4f1ea;color:#16181b;border-radius:10px;padding:10px 10px 16px;box-shadow:0 4px 0 #000;position:relative}
+  .chip::after{content:"";position:absolute;top:8px;right:10px;width:10px;height:10px;border-radius:50%;background:var(--carbon);box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+  .chip .sw{height:120px;border-radius:6px;margin-bottom:12px;position:relative;overflow:hidden}
+  .chip h3{font-size:1.25rem;color:#16181b;margin-bottom:4px}
+  .chip p{font-size:15px;line-height:1.4;color:#3b3f45}
+  .chip .cod{display:block;font-family:var(--shop);font-size:.72rem;letter-spacing:.18em;color:#575c63;margin-bottom:6px}
+  .sw-solido{background:linear-gradient(180deg,#c3162f,#a10f25)}
+  .sw-metal{background:radial-gradient(120% 70% at 30% 20%,rgba(255,255,255,.55),transparent 45%),linear-gradient(160deg,#5e6c80,#2c3442 60%,#4a5668)}
+  .sw-metal::after,.sw-perla::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.2' numOctaves='1'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.6 -.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");opacity:.55;mix-blend-mode:screen}
+  .sw-perla{background:linear-gradient(135deg,#fbfaf6 0%,#efe9f4 30%,#e6f1f2 55%,#f7efe3 80%,#ffffff 100%)}
+  .sw-perla::after{opacity:.25}
+  .sw-candy{background:radial-gradient(90% 60% at 35% 25%,rgba(255,220,150,.75),transparent 45%),radial-gradient(140% 120% at 60% 80%,#4d0010,#9d0b2c 55%,#d4243f)}
+  .sw-mate{background:#2a2b2e}
+  @media(max-width:980px){.carta{grid-template-columns:repeat(2,1fr)}.carta .chip:last-child{grid-column:span 2}}
+
+  /* ---------- 05 CUÁNTO TE DEJA (órdenes de trabajo) ---------- */
+  .ordenes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:40px}
+  .orden{position:relative;background:#f3eee2;color:#1a1c1f;border-radius:4px;padding:30px 22px 22px;box-shadow:0 6px 0 #000;transform:rotate(-.6deg);
+    background-image:repeating-linear-gradient(180deg,transparent 0 31px,rgba(40,70,140,.12) 31px 32px)}
+  .orden:nth-child(2){transform:rotate(.7deg)}
+  .orden:nth-child(3){transform:rotate(-.3deg)}
+  /* clip metálico */
+  .orden::before{content:"";position:absolute;top:-14px;left:50%;width:58px;height:30px;margin-left:-29px;border-radius:6px 6px 3px 3px;
+    background:linear-gradient(180deg,#f1f3f5,var(--chrome-d));border:2px solid #555b63;box-shadow:0 2px 0 rgba(0,0,0,.4)}
+  .orden .on{font-family:var(--shop);font-size:.8rem;letter-spacing:.2em;color:#7b6f55}
+  .orden h3{color:#1a1c1f;font-size:1.35rem;margin:6px 0 14px;line-height:1.05}
+  .orden dl{display:grid;grid-template-columns:1fr auto;gap:6px 10px;font-size:15px}
+  .orden dt{color:#4b4f55}
+  .orden dd{font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+  .orden dd.queda{color:#0f6b2f;font-size:1.15rem}
+  .orden dt.tot,.orden dd.queda{border-top:2px dashed #b9ae92;padding-top:10px;margin-top:4px}
+  .orden .sello{position:absolute;right:12px;top:16px;color:#b3122e;border-color:#b3122e;opacity:.6;font-size:.85rem;padding:2px 9px 1px}
+  .orden h3{padding-right:6px}
+  .nota-ej{margin-top:26px;padding:12px 16px;border:1.5px dashed var(--tape);border-radius:10px;color:#e9e3cf;font-size:15px}
+  .nota-ej b{color:var(--tape)}
+  @media(max-width:900px){.ordenes{grid-template-columns:1fr;gap:34px}}
+
+  /* ---------- 06 TU CAMINO ---------- */
+  .camino{list-style:none;margin-top:34px;position:relative;display:grid;gap:18px}
+  .camino::before{content:"";position:absolute;left:27px;top:6px;bottom:6px;width:4px;background:repeating-linear-gradient(180deg,var(--tape) 0 14px,#16181b 14px 24px);border-radius:2px}
+  .camino li{position:relative;padding:4px 0 4px 78px;min-height:56px}
+  .camino .hito{position:absolute;left:0;top:0;width:58px;height:58px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,#eef0f3,var(--chrome) 45%,var(--chrome-d));border:2px solid #5b6169;color:#15171a;box-shadow:0 3px 0 #000;font-family:var(--shop);line-height:1}
+  .camino .hito small{font-size:.62rem;letter-spacing:.14em}
+  .camino .hito b{font-size:1.45rem;font-weight:400}
+  .camino li.meta .hito{background:linear-gradient(180deg,#ffd75e,var(--tape));border-color:#8a6d12}
+  .camino h3{font-size:1.3rem;margin-bottom:4px}
+  .camino p{color:var(--mut)}
+  .camino p b{color:#fff}
+  .camino-nota{color:var(--mut);margin-top:18px;font-size:15px}
 </style>
 <!-- PT1 fase DISEÑO: sin pixel (lo agrega el Lab al publicar) -->
 </head>
@@ -487,6 +635,7 @@
   </div>
 </header>
 
+<div class="tape-sep" aria-hidden="true"><span>PINTURA FRESCA · NO TOCAR · PINTURA FRESCA · NO TOCAR</span></div>
 <!-- pt8-motos-scrub -->
 <!-- SCRUB 7 ETAPAS: mismo bloque "despiece" de motos (sin pin), desktop y celular -->
 <section class="dp" id="despiece">
@@ -508,6 +657,102 @@
   </div>
 </section>
 
+<div class="tape-sep" aria-hidden="true"><span>PINTURA FRESCA · NO TOCAR · PINTURA FRESCA · NO TOCAR</span></div>
+
+<!-- 02 ANTES / DESPUÉS (deslizable) -->
+<section id="antes-despues" class="shop">
+  <div class="wrap">
+    <div class="sec-head"><span class="placa">02</span><div class="eyebrow">Antes / Después</div></div>
+    <h2 class="title">Arrastra y mira la diferencia</h2>
+    <p class="lead">El mismo carro: a un lado como llegó al taller, al otro como queda cuando sabes el proceso.</p>
+    <div class="ad" id="ad">
+      <img class="ad-despues" src="img/antes-despues/despues-desk.webp" srcset="img/antes-despues/despues-mob.webp 800w, img/antes-despues/despues-desk.webp 1600w" sizes="(max-width:820px) 100vw, 1040px" width="1600" height="534" alt="Después: el carro reparado y pintado, con brillo de clear coat" loading="lazy" decoding="async">
+      <div class="ad-antes"><img src="img/antes-despues/antes-desk.webp" srcset="img/antes-despues/antes-mob.webp 800w, img/antes-despues/antes-desk.webp 1600w" sizes="(max-width:820px) 100vw, 1040px" width="1600" height="534" alt="Antes: el carro con golpes en guardabarros y puerta" loading="lazy" decoding="async"></div>
+      <span class="ad-tag ad-tag-a">ANTES</span><span class="ad-tag ad-tag-d">DESPUÉS</span>
+      <div class="ad-linea" aria-hidden="true"></div>
+      <div class="ad-handle" id="ad-handle" role="slider" tabindex="0" aria-label="Comparar antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% antes"></div>
+    </div>
+    <p class="ad-nota">Desliza la manija con el dedo o el mouse. <span class="sello amarillo" style="margin-left:10px">Hecho a mano</span></p>
+  </div>
+</section>
+
+<div class="tape-sep alt" aria-hidden="true"><span>UTEC · TALLER DE PINTURA · UTEC · TALLER DE PINTURA</span></div>
+
+<!-- 03 PÍNTALO TÚ (configurador de color) -->
+<section id="pintalo" class="shop">
+  <div class="wrap">
+    <div class="sec-head"><span class="placa">03</span><div class="eyebrow">Configurador</div></div>
+    <h2 class="title">Píntalo tú</h2>
+    <p class="lead">Esto es lo que vas a poder hacerle a cualquier carro.</p>
+    <div class="vitrina" id="vitrina">
+      <img class="on" src="img/colores/0-rojo-desk.webp" srcset="img/colores/0-rojo-mob.webp 800w, img/colores/0-rojo-desk.webp 1600w" sizes="(max-width:820px) 100vw, 1040px" width="1600" height="534" alt="El carro pintado en rojo" loading="lazy" decoding="async">
+      <span class="vit-nombre" id="vit-nombre" aria-live="polite">Rojo</span>
+    </div>
+    <div class="muestras" id="muestras" role="radiogroup" aria-label="Elige el color de la pintura"><button type="button" class="muestra" role="radio" aria-checked="true" data-color="0-rojo" data-nombre="Rojo" style="--c:#b3122e"><i></i><span>Rojo</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="1-negro" data-nombre="Negro" style="--c:#0b0b0c"><i></i><span>Negro</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="2-blanco-perla" data-nombre="Blanco perla" style="--c:linear-gradient(135deg,#ffffff,#ece6f1 60%,#e4eef0)"><i></i><span>Blanco perla</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="3-azul" data-nombre="Azul" style="--c:#1a3fb8"><i></i><span>Azul</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="4-gris-nardo" data-nombre="Gris Nardo" style="--c:#8f9496"><i></i><span>Gris Nardo</span></button><button type="button" class="muestra" role="radio" aria-checked="false" data-color="5-candy-verde" data-nombre="Candy verde" style="--c:#17a33b"><i></i><span>Candy verde</span></button><button type="button" class="muestra mate" role="radio" aria-checked="false" data-color="6-negro-mate" data-nombre="Negro mate" style="--c:#26272a"><i></i><span>Negro mate</span></button></div>
+  </div>
+</section>
+
+<div class="tape-sep" aria-hidden="true"><span>PINTURA FRESCA · NO TOCAR · PINTURA FRESCA · NO TOCAR</span></div>
+
+<!-- 04 MUESTRARIO DE ACABADOS (carta de pintura, CSS puro) -->
+<section id="acabados" class="shop">
+  <div class="wrap">
+    <div class="sec-head"><span class="placa">04</span><div class="eyebrow">Carta de pintura</div></div>
+    <h2 class="title">Muestrario de acabados</h2>
+    <p class="lead">No todo el rojo es igual. Estos son los acabados que vas a reconocer y preparar.</p>
+    <div class="carta">
+      <div class="chip"><div class="sw sw-solido"></div><span class="cod">ACB-01</span><h3>Sólido</h3><p>Un solo color plano, sin partículas. El más fácil de igualar.</p></div>
+      <div class="chip"><div class="sw sw-metal"></div><span class="cod">ACB-02</span><h3>Metalizado</h3><p>Lleva partículas de aluminio que brillan y cambian con la luz.</p></div>
+      <div class="chip"><div class="sw sw-perla"></div><span class="cod">ACB-03</span><h3>Perlado</h3><p>Pigmentos de mica que dan reflejos de otro tono según el ángulo.</p></div>
+      <div class="chip"><div class="sw sw-candy"></div><span class="cod">ACB-04</span><h3>Candy</h3><p>Color translúcido sobre una base brillante: se ve profundo, como caramelo.</p></div>
+      <div class="chip"><div class="sw sw-mate"></div><span class="cod">ACB-05</span><h3>Mate</h3><p>Sin brillo, con clear mate. No se pule: se cuida distinto.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="tape-sep alt" aria-hidden="true"><span>UTEC · TALLER DE PINTURA · UTEC · TALLER DE PINTURA</span></div>
+
+<!-- 05 CUÁNTO TE DEJA UN TRABAJO (órdenes de trabajo, valores de ejemplo en COP) -->
+<section id="cuanto" class="shop">
+  <div class="wrap">
+    <div class="sec-head"><span class="placa">05</span><div class="eyebrow">Órdenes de trabajo</div></div>
+    <h2 class="title">Cuánto te deja un trabajo</h2>
+    <p class="lead">Así se arma una cuenta sencilla de taller: lo que cobras, menos lo que gastas en materiales.</p>
+    <div class="ordenes">
+      <article class="orden"><span class="on">ORDEN Nº 001</span><h3>Retoque de puerta y guardabarros</h3>
+        <dl><dt>Horas de trabajo</dt><dd>≈ 10 h</dd><dt>Materiales</dt><dd>$160.000</dd><dt>Cobras</dt><dd>$500.000</dd><dt class="tot"><b>Te queda</b></dt><dd class="queda">$340.000</dd></dl>
+        <span class="sello" aria-hidden="true">Ejemplo</span></article>
+      <article class="orden"><span class="on">ORDEN Nº 002</span><h3>Rines restaurados (4)</h3>
+        <dl><dt>Horas de trabajo</dt><dd>≈ 6 h</dd><dt>Materiales</dt><dd>$80.000</dd><dt>Cobras</dt><dd>$280.000</dd><dt class="tot"><b>Te queda</b></dt><dd class="queda">$200.000</dd></dl>
+        <span class="sello" aria-hidden="true">Ejemplo</span></article>
+      <article class="orden"><span class="on">ORDEN Nº 003</span><h3>Pintura completa carro pequeño</h3>
+        <dl><dt>Horas de trabajo</dt><dd>≈ 45 h</dd><dt>Materiales</dt><dd>$1.000.000</dd><dt>Cobras</dt><dd>$2.400.000</dd><dt class="tot"><b>Te queda</b></dt><dd class="queda">$1.400.000</dd></dl>
+        <span class="sello" aria-hidden="true">Ejemplo</span></article>
+    </div>
+    <p class="nota-ej"><b>Valores de ejemplo, varían según tu ciudad.</b> Pesos colombianos (COP). No incluyen herramientas, compresor ni arriendo de espacio, y no son una promesa de ingresos: lo que cobres depende de tu zona, tus clientes y la calidad de tu trabajo.</p>
+  </div>
+</section>
+
+<div class="tape-sep" aria-hidden="true"><span>PINTURA FRESCA · NO TOCAR · PINTURA FRESCA · NO TOCAR</span></div>
+
+<!-- 06 TU CAMINO (ritmo sugerido, con el contenido real del curso) -->
+<section id="camino" class="shop">
+  <div class="wrap">
+    <div class="sec-head"><span class="placa">06</span><div class="eyebrow">Tu camino</div></div>
+    <h2 class="title">De cero a tu primer carro cobrado</h2>
+    <p class="lead">Un ritmo sugerido con lo que trae el curso. Tú pones la velocidad.</p>
+    <ol class="camino">
+      <li><span class="hito"><small>SEM</small><b>1</b></span><h3>Lijas y masilla</h3><p>Con <b>Tipos de lijas</b> y <b>Aplicación de masilla</b> practicas en una pieza vieja hasta dejarla pareja.</p></li>
+      <li><span class="hito"><small>SEM</small><b>2</b></span><h3>Golpes fuera</h3><p>Con la <b>Clase Latonería PRO</b> (bono) sacas golpes y dejas la lámina lista para el primer.</p></li>
+      <li><span class="hito"><small>SEM</small><b>3</b></span><h3>El color exacto</h3><p>Con <b>Guías para mezclar</b> y <b>Cómo usar las guías</b> igualas el color de un carro real.</p></li>
+      <li><span class="hito"><small>SEM</small><b>4</b></span><h3>Brillo de espejo</h3><p>Con <b>Cómo preparar poliuretano</b> y <b>Técnicas avanzadas</b> aplicas el clear y dejas el acabado espejo.</p></li>
+      <li class="meta"><span class="hito"><small>META</small><b>✓</b></span><h3>Tu primer trabajo cobrado</h3><p>Con el PDF <b>Plantilla de costos</b> armas tu cotización y cobras tu primer retoque. Y si quieres sumar otro servicio, tienes el <b>Curso de Polarizado</b> de bono.</p></li>
+    </ol>
+    <p class="camino-nota">Ritmo sugerido, no obligatorio: tienes acceso de por vida para avanzar a tu velocidad.</p>
+  </div>
+</section>
+
+<div class="tape-sep alt" aria-hidden="true"><span>UTEC · TALLER DE PINTURA · UTEC · TALLER DE PINTURA</span></div>
 <!-- TEMAS: grilla lista para <video> (poster = foto; data-src se llena con los clips de Claw) -->
 <section id="temas">
   <div class="wrap">
@@ -627,6 +872,7 @@
   <div class="wrap">
     <div class="guar">
       <div class="shield">🛡️</div>
+      <span class="sello" style="margin-bottom:14px">Aprobado</span>
       <h2 class="title" style="margin-bottom:10px">Garantía de 7 días</h2>
       <p class="lead" style="margin:0 auto">Tiempo real para revisar el curso antes de decidir. Si en 7 días no es lo que esperabas, te devolvemos el 100% de tu dinero.</p>
     </div>
@@ -798,6 +1044,53 @@
   }
   function req(){ if(!busy){ busy=true; requestAnimationFrame(tick); } }
   window.addEventListener('scroll',req,{passive:true}); window.addEventListener('resize',req); tick();
+})();
+</script>
+<script>
+/* PT9: antes/después deslizable (pointer events: mouse y dedo; teclado con flechas) */
+(function(){
+  var ad=document.getElementById('ad'), h=document.getElementById('ad-handle');
+  if(!ad||!h) return;
+  var drag=false;
+  function set(pct){ pct=Math.max(0,Math.min(100,pct)); ad.style.setProperty('--pos',pct+'%');
+    h.setAttribute('aria-valuenow',Math.round(pct)); h.setAttribute('aria-valuetext',Math.round(pct)+'% antes'); }
+  function fromX(x){ var r=ad.getBoundingClientRect(); set((x-r.left)/r.width*100); }
+  ad.addEventListener('pointerdown',function(e){ drag=true; try{ad.setPointerCapture(e.pointerId);}catch(x){} fromX(e.clientX); });
+  ad.addEventListener('pointermove',function(e){ if(drag) fromX(e.clientX); });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(t){ ad.addEventListener(t,function(){ drag=false; }); });
+  h.addEventListener('keydown',function(e){ var v=parseFloat(h.getAttribute('aria-valuenow'))||50;
+    if(e.key==='ArrowLeft'||e.key==='ArrowDown'){ set(v-5); e.preventDefault(); }
+    else if(e.key==='ArrowRight'||e.key==='ArrowUp'){ set(v+5); e.preventDefault(); }
+    else if(e.key==='Home'){ set(0); e.preventDefault(); } else if(e.key==='End'){ set(100); e.preventDefault(); } });
+  set(50);
+})();
+
+/* PT9: píntalo tú — crossfade 300 ms entre fotos; precarga perezosa al acercarse la sección */
+(function(){
+  var vit=document.getElementById('vitrina'), box=document.getElementById('muestras'), nom=document.getElementById('vit-nombre');
+  if(!vit||!box) return;
+  var SIZES='(max-width:820px) 100vw, 1040px', cache={}, actual=vit.querySelector('img.on'), pedido=0;
+  function ss(c){ return 'img/colores/'+c+'-mob.webp 800w, img/colores/'+c+'-desk.webp 1600w'; }
+  function mk(c,alt){ var im=new Image(); im.decoding='async'; im.sizes=SIZES; im.srcset=ss(c); im.src='img/colores/'+c+'-desk.webp';
+    im.width=1600; im.height=534; im.alt=alt||''; return im; }
+  function precargar(){ [].forEach.call(box.querySelectorAll('.muestra'),function(b){ var c=b.dataset.color; if(!cache[c]) cache[c]=mk(c); }); }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ precargar(); io.disconnect(); } },{rootMargin:'600px 0px'});
+    io.observe(vit);
+  }
+  function elegir(b){
+    var c=b.dataset.color, n=b.dataset.nombre, mio=++pedido;
+    [].forEach.call(box.querySelectorAll('.muestra'),function(x){ x.setAttribute('aria-checked', x===b?'true':'false'); });
+    if(nom) nom.textContent=n;
+    var im=mk(c,'El carro pintado en '+n.toLowerCase());
+    function poner(){ if(mio!==pedido) return; vit.insertBefore(im,nom); requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      im.classList.add('on'); var viejo=actual; actual=im; if(viejo){ viejo.classList.remove('on'); setTimeout(function(){ if(viejo.parentNode && viejo!==actual) viejo.parentNode.removeChild(viejo); },320); } }); }); }
+    if(im.decode) im.decode().then(poner,poner); else { im.onload=poner; im.onerror=poner; }
+  }
+  box.addEventListener('click',function(e){ var b=e.target.closest('.muestra'); if(b) elegir(b); });
+  box.addEventListener('keydown',function(e){ var bs=[].slice.call(box.querySelectorAll('.muestra')), i=bs.indexOf(document.activeElement); if(i<0) return;
+    var j = e.key==='ArrowRight'||e.key==='ArrowDown' ? (i+1)%bs.length : e.key==='ArrowLeft'||e.key==='ArrowUp' ? (i-1+bs.length)%bs.length : -1;
+    if(j>=0){ e.preventDefault(); bs[j].focus(); elegir(bs[j]); } });
 })();
 </script>
 <!-- kit landing-kit: tokens sin uso desde PT8 (escena móvil vertical + engine/scrub.js reemplazados por el IIFE de motos).

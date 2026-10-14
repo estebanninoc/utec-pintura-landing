@@ -59,3 +59,11 @@ Pendiente: precio real (US$XX), links de pago (#PAGO-PENDIENTE), pixel, clips de
   izquierda→derecha con borde del 65% del ancho, easing smoothstep, 6 transiciones parejas; cuadro 1 = Golpes,
   71 = Clear coat) → clip a 1 fps → tools/frames.sh despiece.
 - Borrados img/pt-frames y img/pt-frames-negro (sets viejos).
+
+## PT9 — formato custom shop + 5 secciones nuevas
+- Estética: títulos en Anton (fonts/anton.woff2, OFL, self-hosted, ver fonts/OFL-anton.txt), paleta carbón + rojo + cromo/acero + amarillo cinta,
+  sin glows (sombras duras), placas metálicas 01–08, separadores "cinta de enmascarar" (.tape-sep), sellos (.sello), grano SVG inline ≤5.5%.
+  #despiece queda en #000 puro (sus cuadros tienen fondo negro). El bloque scrub (HTML/JS/cuadros) NO se tocó.
+- 02 Antes/Después (#antes-despues): slider con pointer events + teclado; img/antes-despues/{antes,despues}-{desk,mob}.webp.
+- 03 Píntalo tú (#pintalo): 7 colores, crossfade 300 ms, precarga perezosa (IntersectionObserver 600px); img/colores/*-{desk,mob}.webp.
+- 04 Muestrario (#acabados, CSS puro) · 05 Cuánto te deja (#cuanto, COP de ejemplo + nota) · 06 Tu camino (#camino).
