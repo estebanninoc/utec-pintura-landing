@@ -10,6 +10,7 @@
 <!-- pt14b-giro-precios -->
 <!-- pt14c-antes-despues -->
 <!-- pt14d-carro-integrado -->
+<!-- pt14e-videos -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -225,12 +226,16 @@
   .stat{text-align:center;padding:12px 4px;border-radius:14px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1)}
   .stat .n{font-family:var(--cond);font-weight:800;font-style:italic;font-size:clamp(1.6rem,7vw,2.4rem);line-height:1;background:var(--plata);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
   .stat .l{margin-top:4px;font-size:clamp(.56rem,2.3vw,.76rem);line-height:1.3;color:var(--mut)}
-  .temas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,1.6vw,16px);max-width:900px;margin:22px auto 0}
-  .fx{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:9/16;background:#0b0b0d;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 -1px 0 rgba(255,45,55,.7),0 10px 22px -12px rgba(255,25,35,.5)}
-  .fx video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .fx::before{content:"";position:absolute;top:7px;left:10%;right:10%;height:2px;border-radius:2px;background:#fff;z-index:2;box-shadow:0 0 6px #fff,0 0 12px rgba(255,255,255,.6)}
-  .fx::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.85));pointer-events:none}
-  .fx span{position:absolute;left:8px;right:8px;bottom:9px;z-index:2;font-weight:700;font-size:clamp(.66rem,2.6vw,.95rem);line-height:1.2;color:#fff}
+  .temas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;max-width:900px;margin:22px auto 0}
+  @media(min-width:821px){.temas{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}}
+  /* PT14e: integrados como la llanta: sin marco, bordes del video desvanecidos sobre la cabina, 3 tubos LED arriba */
+  .fx{position:relative;aspect-ratio:9/16;padding-top:14px}
+  .fx video{position:absolute;left:0;right:0;top:14px;bottom:0;width:100%;height:calc(100% - 14px);object-fit:cover;background:transparent;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 90%,transparent);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 90%,transparent);mask-composite:intersect}
+  .fx::before{content:"";position:absolute;top:2px;left:8%;right:8%;height:3px;border-radius:3px;z-index:2;background:var(--tubo);filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px rgba(255,255,255,.6))}
+  .fx::after{content:"";position:absolute;left:0;right:0;top:14px;bottom:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.7) 88%,rgba(0,0,0,0));pointer-events:none}
+  .fx span{position:absolute;left:8px;right:8px;bottom:13%;z-index:2;text-align:center;font-weight:700;font-size:clamp(.82rem,3.4vw,1rem);line-height:1.2;color:#fff;text-shadow:0 1px 6px #000}
   .fx .tag-bono{position:absolute;left:12px;right:auto;bottom:auto;top:18px;font-family:var(--cond);font-style:italic;font-weight:800;font-size:.9rem;color:#fff;background:rgba(150,6,14,.85);border:1px solid var(--rojo2);border-radius:5px;padding:2px 8px}
 
   /* ===== bonos ===== */
@@ -456,14 +461,14 @@
       <div class="stat"><div class="n">~25</div><div class="l">videos de polarizado (bono)</div></div>
       <div class="stat"><div class="n">∞</div><div class="l">acceso de por vida</div></div>
     </div>
-    <!-- PT14a: 6 huecos verticales 9:16 (2 filas x 3) para los videos tipo CapCut; poster = placeholder, data-src llega en otra orden -->
+    <!-- PT14e: 6 videos verticales 9:16 (540x960 H.264, loop con fundido 0,5 s). Arrancan al entrar en pantalla y se pausan al salir (IntersectionObserver de la galería) -->
     <div class="temas">
-      <div class="fx" data-slot="1"><video muted loop playsinline preload="none" poster="img/temas/01-pistola.webp" data-src=""></video><span>Calibración de pistolas</span></div>
-      <div class="fx" data-slot="2"><video muted loop playsinline preload="none" poster="img/temas/02-color.webp" data-src=""></video><span>Colorimetría</span></div>
-      <div class="fx" data-slot="3"><video muted loop playsinline preload="none" poster="img/temas/03-espejo.webp" data-src=""></video><span>Acabados espejo</span></div>
-      <div class="fx" data-slot="4"><video muted loop playsinline preload="none" poster="img/temas/04-rines.webp" data-src=""></video><span>Restauración de rines</span></div>
-      <div class="fx" data-slot="5"><video muted loop playsinline preload="none" poster="img/temas/05-plasticos.webp" data-src=""></video><span>Restauración de plásticos</span></div>
-      <div class="fx" data-slot="6"><video muted loop playsinline preload="none" poster="img/temas/06-masilla.webp" data-src=""></video><span>Aplicación de masilla</span></div>
+      <div class="fx" data-slot="1"><video muted loop playsinline preload="none" poster="img/temas/v/01-pistola.webp" data-src="img/temas/v/01-pistola.mp4" aria-label="Pistola HVLP pintando" disablepictureinpicture></video><span>Pistola</span></div>
+      <div class="fx" data-slot="2"><video muted loop playsinline preload="none" poster="img/temas/v/02-mezcla.webp" data-src="img/temas/v/02-mezcla.mp4" aria-label="Mezcla de color en el taller" disablepictureinpicture></video><span>Mezcla de color</span></div>
+      <div class="fx" data-slot="3"><video muted loop playsinline preload="none" poster="img/temas/v/03-masilla.webp" data-src="img/temas/v/03-masilla.mp4" aria-label="Aplicación de masilla" disablepictureinpicture></video><span>Masilla</span></div>
+      <div class="fx" data-slot="4"><video muted loop playsinline preload="none" poster="img/temas/v/04-pulido.webp" data-src="img/temas/v/04-pulido.mp4" aria-label="Pulido a espejo" disablepictureinpicture></video><span>Pulido espejo</span></div>
+      <div class="fx" data-slot="5"><video muted loop playsinline preload="none" poster="img/temas/v/05-rines.webp" data-src="img/temas/v/05-rines.mp4" aria-label="Restauración de rin" disablepictureinpicture></video><span>Rines</span></div>
+      <div class="fx" data-slot="6"><video muted loop playsinline preload="none" poster="img/temas/v/06-faros.webp" data-src="img/temas/v/06-faros.mp4" aria-label="Restauración de faro" disablepictureinpicture></video><span>Faros</span></div>
     </div>
   </div>
 </section>
