@@ -8,6 +8,7 @@
 <!-- pt13-boceto-total -->
 <!-- pt14a-correcciones -->
 <!-- pt14b-giro-precios -->
+<!-- pt14c-antes-despues -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -113,8 +114,6 @@
     background:url(assets/giro/m/g001.webp) center/128% auto no-repeat;
     -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent),linear-gradient(180deg,transparent,#000 16%,#000 82%,transparent);-webkit-mask-composite:source-in;
     mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent),linear-gradient(180deg,transparent,#000 16%,#000 82%,transparent);mask-composite:intersect}
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent),linear-gradient(180deg,transparent,#000 14%);-webkit-mask-composite:source-in;
-    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent),linear-gradient(180deg,transparent,#000 14%);mask-composite:intersect}
   @media(min-width:900px){
     .vit-cab{margin:10px auto 0;max-width:1240px;overflow:visible}
     .giro{margin:0}
@@ -164,8 +163,10 @@
   /* ===== antes / después ===== */
   .ad-card{padding:44px 14px 18px;max-width:1000px;margin:0 auto}
   .ad-card .t{font-size:clamp(2rem,9vw,3.8rem)}
-  .ad{position:relative;margin-top:22px;aspect-ratio:2/1;background:#000;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.18);
-    box-shadow:0 0 0 1px rgba(255,40,50,.25),0 0 18px rgba(255,30,40,.3);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize;--pos:50%}
+  /* PT14c: antes/después integrado como la llanta: sin marco, bordes desvanecidos sobre la cabina */
+  .ad{position:relative;margin-top:22px;aspect-ratio:2/1;background:none;overflow:hidden;border:0;box-shadow:none;touch-action:pan-y;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 89%,transparent);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 89%,transparent);mask-composite:intersect;user-select:none;-webkit-user-select:none;cursor:ew-resize;--pos:50%}
   @media(min-width:821px){.ad{aspect-ratio:1600/534}}
   .ad img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
   .ad .ad-antes{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
@@ -174,10 +175,13 @@
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:2px solid #fff;box-shadow:0 0 14px rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;cursor:ew-resize}
   .ad-handle::before{content:"‹ ›";font-size:1.05rem;font-weight:700;line-height:1;color:#fff;letter-spacing:.2em;margin-left:.2em}
   .ad-handle:focus-visible{outline:2px solid var(--rojo2);outline-offset:4px}
-  .ad-mini{max-width:760px;margin:0 auto}
-  .ad.ad-faro{aspect-ratio:3/2}
-  #plasticos{padding-top:10px;padding-bottom:24px}
-  .ad-lb{margin-top:14px}
+  .ad-tag{position:absolute;top:12%;z-index:3;pointer-events:none;font-size:.56rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.72);text-shadow:0 1px 4px #000}
+  .ad-tag-a{left:10%}.ad-tag-d{right:10%}
+  .ad-grid{display:grid;gap:26px;margin-top:20px}
+  .ad-fig{margin:0;padding:30px 0 6px}
+  .ad-fig .ad{margin-top:4px;aspect-ratio:4/3}
+  .ad.ad-rin img{object-fit:contain}
+  @media(min-width:821px){.ad-grid{grid-template-columns:1fr 1fr;gap:30px;max-width:1000px;margin-left:auto;margin-right:auto}.ad-fig .ad{aspect-ratio:4/3}}
   .ad-nota{margin-top:10px;text-align:center;color:var(--faint);font-size:.8rem}
 
   /* ===== rines y plásticos ===== */
@@ -382,43 +386,43 @@
       <div class="ad" id="ad">
       <img class="ad-despues" src="img/antes-despues/despues-desk.webp" srcset="img/antes-despues/despues-mob.webp 800w, img/antes-despues/despues-desk.webp 1600w" sizes="(max-width:820px) 100vw, 1040px" width="1600" height="534" alt="Después: el carro reparado y pintado, con brillo de clear coat" loading="lazy" decoding="async">
       <div class="ad-antes"><img src="img/antes-despues/antes-desk.webp" srcset="img/antes-despues/antes-mob.webp 800w, img/antes-despues/antes-desk.webp 1600w" sizes="(max-width:820px) 100vw, 1040px" width="1600" height="534" alt="Antes: el carro con golpes en guardabarros y puerta" loading="lazy" decoding="async"></div>
+      <span class="ad-tag ad-tag-a" aria-hidden="true">Antes</span><span class="ad-tag ad-tag-d" aria-hidden="true">Después</span>
       <div class="ad-linea" aria-hidden="true"></div>
       <div class="ad-handle" id="ad-handle" role="slider" tabindex="0" aria-label="Comparar antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% antes"></div>
     </div>
-      <p class="kick ad-lb"><span>Antes</span><span>Después</span></p>
       <p class="ad-nota">El mismo carro: a un lado como llegó al taller, al otro como queda cuando sabes el proceso. Desliza la manija con el dedo o el mouse.</p>
     </div>
   </div>
 </section>
 
-<!-- PT9b: escenas chicas scroll-scrub (initDespiece copiado de motos): restauración de rines y de plásticos -->
-<section class="sec mini-intro">
+<!-- PT14c: "No todo es lámina" = rin y faro con antes/después arrastrable, integrados como la llanta (sin caja, bordes desvanecidos, 3 tubos LED) -->
+<section class="sec mini-intro" id="no-lamina">
   <div class="wrap">
     <h2 class="t">No todo es <em>lámina</em></h2>
-    <p class="lead">Baja despacio y mira cómo queda un rin rayado; luego arrastra la barra y mira un faro opaco volver a ser transparente.</p>
+    <p class="lead">Arrastra la barra y mira cómo queda un rin rayado y un faro opaco cuando aplicas lo que enseña el curso.</p>
+    <div class="ad-grid">
+    <figure class="cc ad-fig" id="escena-rin">
+      <div class="ad ad-rin" id="ad-rin">
+        <img class="ad-despues" src="img/mini-frames/rin/desk/f_036.webp" srcset="img/mini-frames/rin/mob/f_036.webp 560w, img/mini-frames/rin/desk/f_036.webp 640w" sizes="(max-width:820px) 100vw, 520px" width="640" height="640" alt="Después: el rin restaurado, negro brillante" loading="lazy" decoding="async">
+        <div class="ad-antes"><img src="img/mini-frames/rin/desk/f_001.webp" srcset="img/mini-frames/rin/mob/f_001.webp 560w, img/mini-frames/rin/desk/f_001.webp 640w" sizes="(max-width:820px) 100vw, 520px" width="640" height="640" alt="Antes: rin negro rayado y sucio, con raspones en el borde" loading="lazy" decoding="async"></div>
+        <span class="ad-tag ad-tag-a" aria-hidden="true">Antes</span><span class="ad-tag ad-tag-d" aria-hidden="true">Después</span>
+        <div class="ad-linea" aria-hidden="true"></div>
+        <div class="ad-handle" role="slider" tabindex="0" aria-label="Comparar el rin antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% antes"></div>
+      </div>
+      <ul class="dp-piezas"><li>Restauración de rines</li><li>Raspones del andén</li><li>Pintura negra brillante</li></ul>
+    </figure>
+    <figure class="cc ad-fig" id="plasticos">
+      <div class="ad ad-faro" id="ad-faro">
+        <img class="ad-despues" src="img/mini-frames/faro/desk/f_036.webp" srcset="img/mini-frames/faro/mob/f_036.webp 720w, img/mini-frames/faro/desk/f_036.webp 768w" sizes="(max-width:820px) 100vw, 520px" width="768" height="512" alt="Después: el faro restaurado, transparente" loading="lazy" decoding="async">
+        <div class="ad-antes"><img src="img/mini-frames/faro/desk/f_001.webp" srcset="img/mini-frames/faro/mob/f_001.webp 720w, img/mini-frames/faro/desk/f_001.webp 768w" sizes="(max-width:820px) 100vw, 520px" width="768" height="512" alt="Antes: el faro opaco y amarillento" loading="lazy" decoding="async"></div>
+        <span class="ad-tag ad-tag-a" aria-hidden="true">Antes</span><span class="ad-tag ad-tag-d" aria-hidden="true">Después</span>
+        <div class="ad-linea" aria-hidden="true"></div>
+        <div class="ad-handle" role="slider" tabindex="0" aria-label="Comparar el faro antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% antes"></div>
+      </div>
+      <ul class="dp-piezas"><li>Restauración de plásticos</li></ul>
+    </figure>
+    </div>
   </div>
-</section>
-
-<section class="dp dp-mini" id="escena-rin">
-  <div class="wrap"><div class="cc">
-    <div class="dp-stage-mini" id="scr-rin-stage">
-      <canvas id="scr-rin-canvas" width="800" height="800" role="img" aria-label="Rin negro de carro que pasa de rayado y sucio, con raspones en el borde, a restaurado y brillante."></canvas>
-    </div>
-    <ul class="dp-piezas"><li>Restauración de rines</li><li>Raspones del andén</li><li>Pintura negra brillante</li></ul>
-  </div></div>
-</section>
-
-<section class="sec ad-sec" id="plasticos">
-  <div class="wrap"><div class="ad-card ad-mini">
-    <div class="ad ad-faro" id="ad-faro">
-      <img class="ad-despues" src="img/mini-frames/faro/desk/f_036.webp" srcset="img/mini-frames/faro/mob/f_036.webp 720w, img/mini-frames/faro/desk/f_036.webp 768w" sizes="(max-width:820px) 100vw, 720px" width="768" height="512" alt="Después: el faro restaurado, transparente" loading="lazy" decoding="async">
-      <div class="ad-antes"><img src="img/mini-frames/faro/desk/f_001.webp" srcset="img/mini-frames/faro/mob/f_001.webp 720w, img/mini-frames/faro/desk/f_001.webp 768w" sizes="(max-width:820px) 100vw, 720px" width="768" height="512" alt="Antes: el faro opaco y amarillento" loading="lazy" decoding="async"></div>
-      <div class="ad-linea" aria-hidden="true"></div>
-      <div class="ad-handle" role="slider" tabindex="0" aria-label="Comparar el faro antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% antes"></div>
-    </div>
-    <p class="kick ad-lb"><span>Faro opaco</span><span>Faro transparente</span></p>
-    <ul class="dp-piezas"><li>Restauración de plásticos</li></ul>
-  </div></div>
 </section>
 
 <!-- MUESTRARIO DE ACABADOS -->
@@ -816,8 +820,6 @@ function initDespiece(cfg){
     io.observe(stage);
   } else { activar(); }
 }
-initDespiece({stage:'scr-rin-stage',canvas:'scr-rin-canvas',n:36,w:800,h:800,
-  dirMob:'img/mini-frames/rin/mob/',dirDesk:'img/mini-frames/rin/desk/'});
 </script>
 <script>
 /* PT9b: transiciones de scroll (vanilla, rAF + IntersectionObserver). Solo transform/opacity/clip-path.
