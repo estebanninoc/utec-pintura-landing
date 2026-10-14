@@ -4,6 +4,7 @@
 <!-- pt9b-custom-shop -->
 <!-- pt10-showroom -->
 <!-- pt11-cabina-led -->
+<!-- pt12-giro -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -808,6 +809,27 @@
   @media(prefers-reduced-motion:reduce){
     .led.led-on::before,.sec-head.led.led-on::before{animation:none}
   }
+  /* =====================================================================================
+     PT12: TORNAMESA 360 en "Píntalo tú" (canvas; los cuadros ya traen cabina, humo y piso mojado).
+     Rojo = tornamesa girando; otro color = la foto estática de siempre encima (crossfade) y el canvas se apaga.
+     ===================================================================================== */
+  .giro{position:relative;margin:30px -20px 0;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+  .giro.agarrado{cursor:grabbing}
+  .giro canvas{display:block;width:100%;height:auto;aspect-ratio:422/264;transition:opacity .3s ease;
+    background:url(assets/giro/m/g001.webp) center/128% auto no-repeat;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 13%,#000 84%,transparent);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 13%,#000 84%,transparent);mask-composite:intersect}
+  @media(min-width:900px){.giro{margin:34px -40px 0}.giro canvas{aspect-ratio:604/352;background-size:119.2% auto;background-image:url(assets/giro/d/g001.webp)}}
+  .giro-hint{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);white-space:nowrap;pointer-events:none;transition:opacity .4s;
+    font-family:var(--sans);font-weight:500;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.82);
+    background:rgba(0,0,0,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 13px}
+  .giro.usado .giro-hint{opacity:0}
+  #pintalo .vit-cab .vitrina{position:absolute;left:-20px;right:-20px;top:50%;margin:0;transform:translateY(-50%);transition:opacity .3s ease}
+  @media(min-width:821px){#pintalo .vit-cab .vitrina{left:0;right:0}}
+  .vit-cab.giro-on .vitrina{opacity:0;pointer-events:none}
+  .vit-cab:not(.giro-on) .giro canvas{opacity:0}
+  .vit-cab:not(.giro-on) .giro{pointer-events:none}
+  .vit-cab:not(.giro-on) .giro-hint{opacity:0}
 </style>
 <!-- PT1 fase DISEÑO: sin pixel (lo agrega el Lab al publicar) -->
 </head>
@@ -956,7 +978,7 @@
     <h2 class="title">Píntalo <em class="pt-tu">tú</em></h2>
     <p class="lead">Esto es lo que vas a poder hacerle a cualquier carro.</p>
     <p class="pt-tags"><span>Desde cero</span><span>Técnicas reales</span><span>Acabado espejo</span></p>
-    <div class="vit-cab"><div class="vitrina" id="vitrina">
+    <div class="vit-cab"><div class="giro" id="giro"><canvas id="giro-canvas" width="422" height="264" role="img" aria-label="Mazda 3 rojo girando 360 grados dentro de la cabina de pintura. Arrastra para girarlo."></canvas><span class="giro-hint" aria-hidden="true">↔ arrastra para girar</span></div><div class="vitrina" id="vitrina">
       <img class="on" src="img/colores/0-rojo-desk.webp" srcset="img/colores/0-rojo-mob.webp 800w, img/colores/0-rojo-desk.webp 1600w" sizes="(max-width:820px) 100vw, 1040px" width="1600" height="534" alt="El carro pintado en rojo" loading="lazy" decoding="async">
     </div></div>
     <div class="vit-piso" aria-hidden="true"></div>
@@ -1486,5 +1508,83 @@ initDespiece({stage:'scr-faro-stage',canvas:'scr-faro-canvas',n:36,w:960,h:640,
      {{PACK_INTRO_EYEBROW}} {{PACK_INTRO_TITLE}} {{PACK_INTRO_LEAD}} {{MOTOR_W}} {{MOTOR_H}} {{MOTOR_ARIA}} {{MOTOR_CHIPS_HTML}}
      {{ENGINE_BOOTSTRAP_JS}}
 -->
+<script>
+/* PT12: TORNAMESA 360 en "Píntalo tú". 119 cuadros en bucle (g001..g119), 12.45 fps (1 vuelta ≈ 9.6 s).
+   Arrastre horizontal (pointer events, touch-action:pan-y) ≈ 1 vuelta por ancho de pantalla, inercia al soltar
+   y a los 1.5 s retoma el giro. Póster g001 inmediato; el resto se precarga en orden cuando la sección está a <1 pantalla.
+   Pausa fuera de pantalla. prefers-reduced-motion: quieto (el arrastre sí funciona).
+   Color ≠ rojo: el crossfade de siempre muestra la foto estática encima y el giro se pausa; rojo: vuelve el tornamesa. */
+(function(){
+  var cab=document.querySelector('.vit-cab'), box=document.getElementById('giro'), cv=document.getElementById('giro-canvas'), mu=document.getElementById('muestras');
+  if(!cab||!box||!cv||!cv.getContext) return;
+  var N=119, FPS=12.45, movil=window.matchMedia('(max-width:899px)').matches, dir=movil?'assets/giro/m/':'assets/giro/d/';
+  var SW=movil?540:720, SH=movil?264:352, SX=Math.round(SW*(movil?0.11:0.08)), CW=SW-2*SX;   /* se recortan los laterales: 11% móvil, 8% desktop */
+  var quieto=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ctx=cv.getContext('2d'), imgs=new Array(N), pos=0, vel=0, drag=null, ultimoToque=-1e9, visible=false, rojo=true, raf=0, t0=0, dibujado=-1, cargando=false;
+  cv.width=CW; cv.height=SH;
+  function src(i){ return dir+'g'+String(i+1).padStart(3,'0')+'.webp'; }
+  function cargar(i,cb){ var im=new Image(); im.decoding='async'; im.onload=function(){ imgs[i]=im; cb&&cb(); }; im.onerror=function(){ cb&&cb(); }; im.src=src(i); }
+  function pintar(){
+    var i=((Math.round(pos)%N)+N)%N, k=i;
+    while(!imgs[k] && k>0) k--;            /* si ese cuadro aún no llega, el último que sí */
+    if(!imgs[k] || k===dibujado) return;
+    ctx.drawImage(imgs[k],SX,0,CW,SH,0,0,CW,SH); dibujado=k;
+  }
+  cargar(0,pintar);
+  function precargar(){
+    if(cargando) return; cargando=true;
+    var sig=1, activos=0;
+    (function mas(){ while(activos<4 && sig<N){ activos++; cargar(sig++,function(){ activos--; mas(); }); } })();
+  }
+  function girando(){ return visible && rojo && (drag || !quieto || Math.abs(vel)>0.01); }
+  function tick(t){
+    raf=0; var dt=Math.min(0.1,(t-(t0||t))/1000); t0=t;
+    if(!drag){
+      if(Math.abs(vel)>0.01){ pos+=vel*dt; vel*=Math.pow(0.04,dt); }          /* inercia corta */
+      else { vel=0; if(!quieto && t-ultimoToque>1500) pos+=FPS*dt; }        /* giro automático */
+    }
+    pintar();
+    if(girando()) raf=requestAnimationFrame(tick); else t0=0;
+  }
+  function arrancar(){ if(!raf && girando()) raf=requestAnimationFrame(tick); }
+
+  /* arrastre */
+  var FxPx=function(){ return N/Math.max(320,window.innerWidth); };
+  box.addEventListener('pointerdown',function(e){
+    if(!rojo || (e.pointerType==='mouse' && e.button!==0)) return;
+    drag={x:e.clientX,t:performance.now(),id:e.pointerId}; vel=0; precargar();
+    try{ box.setPointerCapture(e.pointerId); }catch(_){}
+    box.classList.add('agarrado'); arrancar();
+  });
+  box.addEventListener('pointermove',function(e){
+    if(!drag||e.pointerId!==drag.id) return;
+    var now=performance.now(), dx=e.clientX-drag.x, df=-dx*FxPx();
+    pos+=df; if(now>drag.t) vel=0.7*vel+0.3*(df/((now-drag.t)/1000));
+    drag.x=e.clientX; drag.t=now;
+    if(Math.abs(dx)>0) box.classList.add('usado');
+  });
+  function soltar(e){
+    if(!drag||e.pointerId!==drag.id) return;
+    if(performance.now()-drag.t>80) vel=0;
+    vel=Math.max(-60,Math.min(60,vel)); drag=null; ultimoToque=performance.now();
+    box.classList.remove('agarrado'); arrancar();
+  }
+  box.addEventListener('pointerup',soltar); box.addEventListener('pointercancel',soltar); box.addEventListener('lostpointercapture',soltar);
+
+  /* carga diferida (<1 pantalla) y pausa fuera de pantalla */
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})) precargar(); },{rootMargin:'100% 0px'}).observe(box);
+    new IntersectionObserver(function(es){ visible=es[0].isIntersecting; if(visible) arrancar(); }).observe(box);
+  } else { visible=true; precargar(); arrancar(); }
+
+  /* colores: rojo = tornamesa; otro = foto estática (crossfade existente) y giro en pausa */
+  cab.classList.add('giro-on');
+  function revisar(){
+    var b=mu&&mu.querySelector('.muestra[aria-checked="true"]'); rojo=!b || b.getAttribute('data-color')==='0-rojo';
+    cab.classList.toggle('giro-on',rojo); if(rojo){ ultimoToque=-1e9; arrancar(); }
+  }
+  if(mu && 'MutationObserver' in window) new MutationObserver(revisar).observe(mu,{subtree:true,attributes:true,attributeFilter:['aria-checked']});
+})();
+</script>
 </body>
 </html>
